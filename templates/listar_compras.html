@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Compras de Veículos</h4>
+        <a href="/compras/cadastrar" class="btn btn-light">Nova Compra</a>
+    </div>
+    <div class="card-body">
+        {% if compras %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Data</th>
+                        <th>Veículo</th>
+                        <th>Cliente (Vendedor)</th>
+                        <th>Valor Pago</th>
+                        <th>Forma Pagamento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for compra in compras %}
+                    <tr>
+                        <td>{{ compra.idcompra }}</td>
+                        <td>{{ compra.data.strftime('%d/%m/%Y') if compra.data else '' }}</td>
+                        <td>{{ compra.idplaca }} - {{ compra.modelo_veiculo }}</td>
+                        <td>{{ compra.nome }}</td>
+                        <td>R$ {{ "%.2f"|format(compra.valor_pago) }}</td>
+                        <td>{{ compra.forma_pagamento }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info text-center">
+            Nenhuma compra cadastrada.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

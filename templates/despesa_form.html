@@ -1,0 +1,68 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Cadastrar Despesa</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/despesas/cadastrar">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="idplaca" class="form-label">Veículo</label>
+                                <select class="form-control" id="idplaca" name="idplaca" required>
+                                    <option value="">Selecione um veículo</option>
+                                    {% for veiculo in veiculos %}
+                                    <option value="{{ veiculo.idplaca }}">
+                                        {{ veiculo.idplaca }} - {{ veiculo.fabricante }} {{ veiculo.modelo_veiculo }} ({{ veiculo.ano }})
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="idprestador" class="form-label">Prestador de Serviço</label>
+                                <select class="form-control" id="idprestador" name="idprestador" required>
+                                    <option value="">Selecione um prestador</option>
+                                    {% for prestador in prestadores %}
+                                    <option value="{{ prestador.idprestador }}">{{ prestador.nome_empresa }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descricao" class="form-label">Descrição do Serviço</label>
+                        <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Ex: Revisão completa, Troca de óleo, Pintura..." required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="valor" class="form-label">Valor da Despesa</label>
+                                <input type="number" step="0.01" class="form-control" id="valor" name="valor" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="data_servico" class="form-label">Data do Serviço</label>
+                                <input type="date" class="form-control" id="data_servico" name="data_servico" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Cadastrar Despesa</button>
+                        <a href="/despesas" class="btn btn-secondary">Voltar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

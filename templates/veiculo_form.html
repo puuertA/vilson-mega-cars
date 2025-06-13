@@ -1,0 +1,115 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Cadastrar Veículo</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/veiculos/cadastrar">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="idplaca" class="form-label">Placa</label>
+                                <input type="text" class="form-control" id="idplaca" name="idplaca" pattern="[A-Z]{3}[0-9][A-Z][0-9]{2}|[A-Z]{3}[0-9]{4}" placeholder="ABC1234 ou ABC1D23" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="ano" class="form-label">Ano</label>
+                                <input type="number" class="form-control" id="ano" name="ano" min="1900" max="2030" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="modelo" class="form-label">Modelo (Ano)</label>
+                                <input type="number" class="form-control" id="modelo" name="modelo" min="1900" max="2030" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="fabricante" class="form-label">Fabricante</label>
+                                <input type="text" class="form-control" id="fabricante" name="fabricante" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="modelo_veiculo" class="form-label">Modelo do Veículo</label>
+                                <input type="text" class="form-control" id="modelo_veiculo" name="modelo_veiculo" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="cor" class="form-label">Cor</label>
+                                <input type="text" class="form-control" id="cor" name="cor" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="preco_fipe" class="form-label">Preço FIPE</label>
+                                <input type="number" step="0.01" class="form-control" id="preco_fipe" name="preco_fipe" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="preco_venda" class="form-label">Preço de Venda</label>
+                                <input type="number" step="0.01" class="form-control" id="preco_venda" name="preco_venda" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <h5>Despesa Inicial (Opcional)</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="prestador" class="form-label">Prestador de Serviço</label>
+                                <select class="form-control" id="prestador" name="prestador">
+                                    <option value="">Selecione um prestador</option>
+                                    {% for prestador in prestadores %}
+                                    <option value="{{ prestador.idprestador }}">{{ prestador.nome_empresa }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="data_servico" class="form-label">Data do Serviço</label>
+                                <input type="date" class="form-control" id="data_servico" name="data_servico">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="descricao" class="form-label">Descrição da Despesa</label>
+                                <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Ex: Revisão, Pintura, etc.">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="valor_despesa" class="form-label">Valor da Despesa</label>
+                                <input type="number" step="0.01" class="form-control" id="valor_despesa" name="valor_despesa">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Cadastrar Veículo</button>
+                        <a href="/veiculos" class="btn btn-secondary">Voltar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

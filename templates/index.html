@@ -1,43 +1,166 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-8">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Sistema de Vendas</h4>
-            </div>
-            <div class="card-body">
-                <div class="text-center mb-4">
-                    <h2>🔥 Bem-vindo ao Sistema de Vendas 🔥</h2>
-                    <p class="lead">Gerencie seus clientes 🕵️‍♂️, produtos 📦 e vendas 💰 em um único lugar</p>
-                </div>
+<div class="hero-section mb-5">
+    <div class="container text-center">
+        <div class="logo-container mb-4">
+            <img src="{{ url_for('static', filename='images/VilsonMegaCarsLogo.png') }}" alt="Vilson's Mega Cars" class="main-logo">
+        </div>
+        <h1 class="hero-title">Sistema de Gerenciamento</h1>
+        <p class="hero-subtitle">Controle total da sua concessionária em um só lugar</p>
+    </div>
+</div>
 
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <div class="card h-100">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Clientes</h5>
-                                <p class="card-text">Cadastre e gerencie seus clientes</p>
-                                <a href="/clientes" class="btn btn-primary">Acessar</a>
+<div class="container">
+    <div class="row g-4">
+        <!-- Primeira linha -->
+        <div class="col-lg-4 col-md-6">
+            <div class="module-card clients-card">
+                <div class="card-icon">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div class="card-content">
+                    <h5 class="card-title">Clientes</h5>
+                    <p class="card-text">Cadastre e gerencie sua base de clientes</p>
+                    <div class="card-actions">
+                        <a href="/clientes" class="btn btn-custom btn-primary-custom">Gerenciar</a>
+                        <a href="/clientes/cadastrar" class="btn btn-custom btn-secondary-custom">Novo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="module-card vehicles-card">
+                <div class="card-icon">
+                    <i class="bi bi-car-front-fill"></i>
+                </div>
+                <div class="card-content">
+                    <h5 class="card-title">Veículos</h5>
+                    <p class="card-text">Controle seu estoque de veículos</p>
+                    <div class="card-actions">
+                        <a href="/veiculos" class="btn btn-custom btn-primary-custom">Estoque</a>
+                        <a href="/veiculos/cadastrar" class="btn btn-custom btn-secondary-custom">Adicionar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="module-card providers-card">
+                <div class="card-icon">
+                    <i class="bi bi-building"></i>
+                </div>
+                <div class="card-content">
+                    <h5 class="card-title">Prestadores</h5>
+                    <p class="card-text">Gerencie fornecedores de serviços</p>
+                    <div class="card-actions">
+                        <a href="/prestadores" class="btn btn-custom btn-primary-custom">Listar</a>
+                        <a href="/prestadores/cadastrar" class="btn btn-custom btn-secondary-custom">Cadastrar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-2">
+        <!-- Segunda linha -->
+        <div class="col-lg-4 col-md-6">
+            <div class="module-card sales-card">
+                <div class="card-icon">
+                    <i class="bi bi-cash-stack"></i>
+                </div>
+                <div class="card-content">
+                    <h5 class="card-title">Vendas</h5>
+                    <p class="card-text">Registre e acompanhe suas vendas</p>
+                    <div class="card-actions">
+                        <a href="/vendas" class="btn btn-custom btn-primary-custom">Histórico</a>
+                        <a href="/vendas/cadastrar" class="btn btn-custom btn-secondary-custom">Nova Venda</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="module-card expenses-card">
+                <div class="card-icon">
+                    <i class="bi bi-receipt"></i>
+                </div>
+                <div class="card-content">
+                    <h5 class="card-title">Despesas</h5>
+                    <p class="card-text">Controle gastos e manutenções</p>
+                    <div class="card-actions">
+                        <a href="/despesas" class="btn btn-custom btn-primary-custom">Ver Todas</a>
+                        <a href="/despesas/cadastrar" class="btn btn-custom btn-secondary-custom">Registrar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="module-card purchases-card">
+                <div class="card-icon">
+                    <i class="bi bi-cart-plus"></i>
+                </div>
+                <div class="card-content">
+                    <h5 class="card-title">Compras</h5>
+                    <p class="card-text">Registre aquisições de veículos</p>
+                    <div class="card-actions">
+                        <a href="/compras" class="btn btn-custom btn-primary-custom">Histórico</a>
+                        <a href="/compras/cadastrar" class="btn btn-custom btn-secondary-custom">Nova Compra</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção de estatísticas rápidas -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="stats-section">
+                <h3 class="text-center mb-4">Visão Geral do Negócio</h3>
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="bi bi-car-front"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4>--</h4>
+                                <p>Veículos em Estoque</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="card h-100">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Produtos</h5>
-                                <p class="card-text">Cadastre e gerencie seus produtos</p>
-                                <a href="/produtos" class="btn btn-primary">Acessar</a>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="bi bi-people"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4>--</h4>
+                                <p>Clientes Cadastrados</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="card h-100">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Vendas</h5>
-                                <p class="card-text">Registre e controle suas vendas</p>
-                                <a href="/vendas" class="btn btn-primary">Acessar</a>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="bi bi-graph-up"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4>R$ --</h4>
+                                <p>Vendas do Mês</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="bi bi-tools"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4>R$ --</h4>
+                                <p>Despesas do Mês</p>
                             </div>
                         </div>
                     </div>

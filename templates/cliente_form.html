@@ -1,27 +1,56 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-8">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Cadastrar Cliente</h4>
-            </div>
-            <div class="card-body">
-                <form method="POST" action="/clientes/cadastrar">
-                    <div class="mb-3">
-                        <label for="nome" class="form-label">Nome</label>
-                        <input type="text" class="form-control" id="nome" name="nome" required>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="form-card">
+                <div class="form-header">
+                    <div class="form-icon">
+                        <i class="bi bi-person-plus-fill"></i>
                     </div>
-                    <div class="mb-3">
-                        <label for="endereco" class="form-label">Endereço</label>
-                        <input type="text" class="form-control" id="endereco" name="endereco" required>
-                    </div>
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary">Cadastrar</button>
-                        <a href="/clientes" class="btn btn-secondary">Voltar</a>
-                    </div>
-                </form>
+                    <h4 class="mb-0">Cadastrar Cliente</h4>
+                </div>
+                <div class="form-body">
+                    <form method="POST" action="/clientes/cadastrar">
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome</label>
+                            <input type="text" class="form-control custom-input" id="nome" name="nome" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="endereco" class="form-label">Endereço</label>
+                            <input type="text" class="form-control custom-input" id="endereco" name="endereco" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="cidade" class="form-label">Cidade</label>
+                                    <input type="text" class="form-control custom-input" id="cidade" name="cidade" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="uf" class="form-label">UF</label>
+                                    <input type="text" class="form-control custom-input" id="uf" name="uf" maxlength="2" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="cep" class="form-label">CEP</label>
+                                    <input type="text" class="form-control custom-input" id="cep" name="cep" pattern="[0-9]{5}-?[0-9]{3}" placeholder="12345-678" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-custom btn-primary-custom">
+                                <i class="bi bi-check-lg me-2"></i>Cadastrar
+                            </button>
+                            <a href="/clientes" class="btn btn-custom btn-secondary-custom">
+                                <i class="bi bi-arrow-left me-2"></i>Voltar
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

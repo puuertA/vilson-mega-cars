@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Prestadores de Serviço</h4>
+        <a href="/prestadores/cadastrar" class="btn btn-light">Novo Prestador</a>
+    </div>
+    <div class="card-body">
+        {% if prestadores %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome da Empresa</th>
+                        <th>Cidade</th>
+                        <th>UF</th>
+                        <th>CEP</th>
+                        <th>Forma Pagamento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for prestador in prestadores %}
+                    <tr>
+                        <td>{{ prestador.idprestador }}</td>
+                        <td>{{ prestador.nome_empresa }}</td>
+                        <td>{{ prestador.cidade }}</td>
+                        <td>{{ prestador.uf }}</td>
+                        <td>{{ prestador.cep }}</td>
+                        <td>{{ prestador.forma_pagamento }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info text-center">
+            Nenhum prestador cadastrado.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,92 +1,74 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="card">
-    <div class="card-header bg-primary text-white">
-        <h4 class="mb-0">Cadastrar Venda</h4>
-    </div>
-    <div class="card-body">
-        <form method="POST" action="/vendas/cadastrar" id="formVenda">
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="data" class="form-label">Data</label>
-                    <input type="date" class="form-control" id="data" name="data" required>
-                </div>
-                <div class="col-md-6">
-                    <label for="codcliente" class="form-label">Cliente</label>
-                    <select class="form-select" id="codcliente" name="codcliente" required>
-                        <option value="" selected disabled>Selecione um cliente</option>
-                        {% for cliente in clientes %}
-                        <option value="{{ cliente.codcliente }}">{{ cliente.nome }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Cadastrar Venda</h4>
             </div>
+            <div class="card-body">
+                <form method="POST" action="/vendas/cadastrar">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="data" class="form-label">Data da Venda</label>
+                                <input type="date" class="form-control" id="data" name="data" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="valor_vendido" class="form-label">Valor Vendido</label>
+                                <input type="number" step="0.01" class="form-control" id="valor_vendido" name="valor_vendido" required>
+                            </div>
+                        </div>
+                    </div>
 
-            <h5 class="mb-3">Itens da Venda</h5>
-            <div id="itens">
-                <div class="item-venda card mb-3">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-5 mb-2">
-                                <label class="form-label">Produto</label>
-                                <select class="form-select produto-select" name="codproduto" required>
-                                    <option value="" selected disabled>Selecione um produto</option>
-                                    {% for produto in produtos %}
-                                    <option value="{{ produto.codproduto }}" data-preco="{{ produto.preco }}">
-                                        {{ produto.nome }} - R$ {{ produto.preco }}
-                                    </option>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="idcliente" class="form-label">Cliente</label>
+                                <select class="form-control" id="idcliente" name="idcliente" required>
+                                    <option value="">Selecione um cliente</option>
+                                    {% for cliente in clientes %}
+                                    <option value="{{ cliente.idcliente }}">{{ cliente.nome }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="col-md-2 mb-2">
-                                <label class="form-label">Quantidade</label>
-                                <input type="number" class="form-control qtde-input" name="qtde" min="1" value="1" required>
-                            </div>
-                            <div class="col-md-3 mb-2">
-                                <label class="form-label">Valor Unit.</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="number" class="form-control valor-input" name="valor" step="0.01" min="0" required>
-                                </div>
-                            </div>
-                            <div class="col-md-2 mb-2">
-                                <label class="form-label">Subtotal</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control subtotal" readonly>
-                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="idplaca" class="form-label">Veículo (Opcional)</label>
+                                <select class="form-control" id="idplaca" name="idplaca">
+                                    <option value="">Selecione um veículo (opcional)</option>
+                                    {% for veiculo in veiculos %}
+                                    <option value="{{ veiculo.idplaca }}">{{ veiculo.idplaca }} - {{ veiculo.fabricante }} {{ veiculo.modelo_veiculo }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="mb-3">
-                <button type="button" id="addItem" class="btn btn-secondary">
-                    <i class="bi bi-plus-circle"></i> Adicionar Item
-                </button>
-            </div>
-
-            <div class="row justify-content-end mb-3">
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Total da Venda</h5>
-                            <div class="input-group">
-                                <span class="input-group-text">R$</span>
-                                <input type="text" class="form-control" id="totalVenda" readonly>
-                            </div>
-                        </div>
+                    <div class="mb-3">
+                        <label for="forma_pagamento" class="form-label">Forma de Pagamento</label>
+                        <select class="form-control" id="forma_pagamento" name="forma_pagamento" required>
+                            <option value="">Selecione...</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                            <option value="PIX">PIX</option>
+                            <option value="Cartão de Crédito">Cartão de Crédito</option>
+                            <option value="Cartão de Débito">Cartão de Débito</option>
+                            <option value="Transferência">Transferência</option>
+                            <option value="Financiamento">Financiamento</option>
+                        </select>
                     </div>
-                </div>
-            </div>
 
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary">Finalizar Venda</button>
-                <a href="/vendas" class="btn btn-secondary">Voltar</a>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Cadastrar Venda</button>
+                        <a href="/vendas" class="btn btn-secondary">Voltar</a>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 {% endblock %}

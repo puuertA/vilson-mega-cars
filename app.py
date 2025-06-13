@@ -1,12 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
-from models.cliente import Cliente
-from models.produto import Produto
-from models.venda import Venda
-from models.itemvenda import ItemVenda
 from controllers.cliente_controller import ClienteController
-from controllers.produto_controller import ProdutoController
 from controllers.venda_controller import VendaController
-from controllers.itemvenda_controller import ItemVendaController
+from controllers.veiculo_controller import VeiculoController
+from controllers.prestador_controller import PrestadorController
+from controllers.despesa_controller import DespesaController
+from controllers.compra_controller import CompraController
 import config
 
 # Configuração do Flask para localizar os templates na estrutura correta
@@ -29,24 +27,118 @@ def cadastrar_cliente():
     if request.method == 'POST':
         nome = request.form['nome']
         endereco = request.form['endereco']
-        ClienteController.cadastrar(nome, endereco)
-        return redirect(url_for('listar_clientes'))
+        cidade = request.form['cidade']
+        uf = request.form['uf']
+        cep = request.form['cep']
+        
+        ClienteController.cadastrar(nome, endereco, cidade, uf, cep)
+        return redirect('/clientes')
+    
     return render_template('cliente_form.html')
 
-# ----- PRODUTO -----
-@app.route('/produtos')
-def listar_produtos():
-    produtos = ProdutoController.listar()
-    return render_template('listar_produtos.html', produtos=produtos)
+# ----- PRESTADOR -----
+@app.route('/prestadores')
+def listar_prestadores():
+    prestadores = PrestadorController.listar()
+    return render_template('listar_prestadores.html', prestadores=prestadores)
 
-@app.route('/produtos/cadastrar', methods=['GET', 'POST'])
-def cadastrar_produto():
+@app.route('/prestadores/cadastrar', methods=['GET', 'POST'])
+def cadastrar_prestador():
     if request.method == 'POST':
-        nome = request.form['nome']
-        preco = float(request.form['preco'])
-        ProdutoController.cadastrar(nome, preco)
-        return redirect(url_for('listar_produtos'))
-    return render_template('produto_form.html')
+        nome_empresa = request.form['nome_empresa']
+        cidade = request.form['cidade']
+        uf = request.form['uf']
+        cep = request.form['cep']
+        forma_pagamento = request.form['forma_pagamento']
+        
+        PrestadorController.cadastrar(nome_empresa, cidade, uf, cep, forma_pagamento)
+        return redirect('/prestadores')
+    
+    return render_template('prestador_form.html')
+
+# ----- VEÍCULO -----
+@app.route('/veiculos')
+def listar_veiculos():
+    veiculos = VeiculoController.listar()
+    return render_template('listar_veiculos.html', veiculos=veiculos)
+
+@app.route('/veiculos/cadastrar', methods=['GET', 'POST'])
+def cadastrar_veiculo():
+    if request.method == 'POST':
+        idplaca = request.form['idplaca']
+        ano = int(request.form['ano'])
+        modelo = int(request.form['modelo'])
+        preco_fipe = float(request.form['preco_fipe'])
+        fabricante = request.form['fabricante']
+        modelo_veiculo = request.form['modelo_veiculo']
+        cor = request.form['cor']
+        preco_venda = float(request.form['preco_venda'])
+        
+        VeiculoController.cadastrar(idplaca, ano, modelo, preco_fipe, fabricante, modelo_veiculo, cor, preco_venda)
+        
+        # Se foi informada uma despesa inicial
+        if request.form.get('prestador') and request.form.get('descricao') and request.form.get('valor_despesa'):
+            prestador = int(request.form['prestador'])
+            descricao = request.form['descricao']
+            valor_despesa = float(request.form['valor_despesa'])
+            data_servico = request.form['data_servico']
+            
+            DespesaController.cadastrar(idplaca, descricao, valor_despesa, prestador, data_servico)
+        
+        return redirect('/veiculos')
+    
+    prestadores = PrestadorController.listar()
+    return render_template('veiculo_form.html', prestadores=prestadores)
+
+# ----- DESPESA -----
+@app.route('/despesas')
+def listar_despesas():
+    despesas = DespesaController.listar()
+    return render_template('listar_despesas.html', despesas=despesas)
+
+@app.route('/despesas/veiculo/<string:idplaca>')
+def listar_despesas_veiculo(idplaca):
+    despesas = DespesaController.listar_por_veiculo(idplaca)
+    veiculo = VeiculoController.buscar_por_id(idplaca)
+    return render_template('despesas_veiculo.html', despesas=despesas, veiculo=veiculo)
+
+@app.route('/despesas/cadastrar', methods=['GET', 'POST'])
+def cadastrar_despesa():
+    if request.method == 'POST':
+        idplaca = request.form['idplaca']
+        descricao = request.form['descricao']
+        valor = float(request.form['valor'])
+        idprestador = int(request.form['idprestador'])
+        data_servico = request.form['data_servico']
+        
+        DespesaController.cadastrar(idplaca, descricao, valor, idprestador, data_servico)
+        return redirect('/despesas')
+    
+    veiculos = VeiculoController.listar()
+    prestadores = PrestadorController.listar()
+    return render_template('despesa_form.html', veiculos=veiculos, prestadores=prestadores)
+
+# ----- COMPRA -----
+@app.route('/compras')
+def listar_compras():
+    compras = CompraController.listar()
+    return render_template('listar_compras.html', compras=compras)
+
+@app.route('/compras/cadastrar', methods=['GET', 'POST'])
+def cadastrar_compra():
+    if request.method == 'POST':
+        idplaca = request.form['idplaca']
+        idcliente = int(request.form['idcliente'])
+        data = request.form['data']
+        valor_pago = float(request.form['valor_pago'])
+        forma_pagamento = request.form['forma_pagamento']
+        
+        CompraController.cadastrar(idplaca, idcliente, data, valor_pago, forma_pagamento)
+        return redirect('/compras')
+    
+    veiculos = VeiculoController.listar()
+    clientes = ClienteController.listar()
+    return render_template('compra_form.html', veiculos=veiculos, clientes=clientes)
 
 # ----- VENDA -----
 @app.route('/vendas')
@@ -58,36 +150,22 @@ def listar_vendas():
 def cadastrar_venda():
     if request.method == 'POST':
         data = request.form['data']
-        codcliente = int(request.form['codcliente'])
+        idcliente = int(request.form['idcliente'])
+        idplaca = request.form.get('idplaca')
+        valor_vendido = float(request.form['valor_vendido'])
+        forma_pagamento = request.form['forma_pagamento']
 
-        # Receber múltiplos produtos (requer o uso de arrays no form HTML)
-        produtos = request.form.getlist('codproduto')
-        qtde = request.form.getlist('qtde')
-        valor = request.form.getlist('valor')
-
-        itens = []
-        for i in range(len(produtos)):
-            itens.append({
-                'codproduto': int(produtos[i]),
-                'qtde': int(qtde[i]),
-                'valor': float(valor[i])
-            })
-
-        VendaController.cadastrar(data, codcliente, itens)
-        return redirect(url_for('listar_vendas'))
+        VendaController.cadastrar(data, valor_vendido, idcliente, idplaca, forma_pagamento)
+        return redirect('/vendas')
 
     clientes = ClienteController.listar()
-    produtos = ProdutoController.listar()
-    return render_template('venda_form.html', clientes=clientes, produtos=produtos)
+    veiculos = VeiculoController.listar()
+    return render_template('venda_form.html', clientes=clientes, veiculos=veiculos)
 
-@app.route('/vendas/<int:codvenda>')
-def detalhes_venda(codvenda):
-    itens = VendaController.listar_itens(codvenda)
-
-    # Calcular o total da venda
-    total = sum(item['qtde'] * item['valor'] for item in itens)
-
-    return render_template('detalhes_venda.html', itens=itens, codvenda=codvenda, total=total)
+@app.route('/vendas/<int:idvenda>')
+def detalhes_venda(idvenda):
+    venda = VendaController.buscar_por_id(idvenda)
+    return render_template('detalhes_venda.html', venda=venda, idvenda=idvenda)
 
 if __name__ == '__main__':
     app.run(debug=True)
