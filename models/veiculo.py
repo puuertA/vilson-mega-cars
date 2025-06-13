@@ -36,3 +36,13 @@ class Veiculo:
             cursor.execute("UPDATE veiculo SET total_despesa = %s WHERE idplaca = %s", (total_despesa, idplaca))
         conexao.commit()
         conexao.close()
+
+    @staticmethod
+    def contar_total():
+        """Conta o total de veículos cadastrados"""
+        conexao = conectar()
+        with conexao.cursor() as cursor:
+            cursor.execute("SELECT COUNT(*) as total FROM veiculo")
+            resultado = cursor.fetchone()
+        conexao.close()
+        return resultado['total'] if resultado else 0

@@ -1,44 +1,74 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="card">
-    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">Prestadores de Serviço</h4>
-        <a href="/prestadores/cadastrar" class="btn btn-light">Novo Prestador</a>
-    </div>
-    <div class="card-body">
-        {% if prestadores %}
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome da Empresa</th>
-                        <th>Cidade</th>
-                        <th>UF</th>
-                        <th>CEP</th>
-                        <th>Forma Pagamento</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for prestador in prestadores %}
-                    <tr>
-                        <td>{{ prestador.idprestador }}</td>
-                        <td>{{ prestador.nome_empresa }}</td>
-                        <td>{{ prestador.cidade }}</td>
-                        <td>{{ prestador.uf }}</td>
-                        <td>{{ prestador.cep }}</td>
-                        <td>{{ prestador.forma_pagamento }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+<div class="container mt-4">
+    <div class="table-card">
+        <div class="table-header">
+            <div class="header-content">
+                <div class="header-icon">
+                    <i class="bi bi-building-gear"></i>
+                </div>
+                <h4 class="mb-0">Prestadores de Serviço</h4>
+            </div>
+            <a href="/prestadores/cadastrar" class="btn btn-custom btn-primary-custom">
+                <i class="bi bi-building-add me-2"></i>Novo Prestador
+            </a>
         </div>
-        {% else %}
-        <div class="alert alert-info text-center">
-            Nenhum prestador cadastrado.
+        <div class="table-body">
+            {% if prestadores %}
+            <div class="table-responsive">
+                <table class="table custom-table">
+                    <thead>
+                        <tr>
+                            <th><i class="bi bi-hash me-2"></i>ID</th>
+                            <th><i class="bi bi-building me-2"></i>Nome da Empresa</th>
+                            <th><i class="bi bi-geo-alt me-2"></i>Cidade</th>
+                            <th><i class="bi bi-map me-2"></i>UF</th>
+                            <th><i class="bi bi-mailbox me-2"></i>CEP</th>
+                            <th><i class="bi bi-credit-card me-2"></i>Forma Pagamento</th>
+                            <th><i class="bi bi-gear me-2"></i>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prestador in prestadores %}
+                        <tr class="table-row">
+                            <td><span class="badge badge-id">{{ prestador.idprestador }}</span></td>
+                            <td class="fw-bold company-name">{{ prestador.nome_empresa }}</td>
+                            <td>{{ prestador.cidade }}</td>
+                            <td><span class="badge badge-uf">{{ prestador.uf }}</span></td>
+                            <td>{{ prestador.cep }}</td>
+                            <td><span class="badge badge-payment">{{ prestador.forma_pagamento }}</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-action-edit" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-action-view" title="Ver Serviços">
+                                        <i class="bi bi-list-task"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-action-delete" title="Excluir">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="bi bi-building-gear"></i>
+                </div>
+                <h5>Nenhum prestador cadastrado</h5>
+                <p>Adicione prestadores de serviço para gerenciar as despesas dos veículos.</p>
+                <a href="/prestadores/cadastrar" class="btn btn-custom btn-primary-custom">
+                    <i class="bi bi-building-add me-2"></i>Cadastrar Primeiro Prestador
+                </a>
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
     </div>
 </div>
 {% endblock %}

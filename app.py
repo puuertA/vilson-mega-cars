@@ -7,6 +7,7 @@ from controllers.despesa_controller import DespesaController
 from controllers.compra_controller import CompraController
 import config
 
+
 # Configuração do Flask para localizar os templates na estrutura correta
 app = Flask(__name__,
             template_folder='templates')
@@ -14,7 +15,29 @@ app = Flask(__name__,
 # Página inicial
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # Buscar estatísticas para a página inicial
+    try:
+        total_veiculos = VeiculoController.contar_veiculos()
+        total_clientes = ClienteController.contar_clientes()
+        vendas_mes = VendaController.total_vendas_mes()
+        despesas_mes = DespesaController.total_despesas_mes()
+        
+        estatisticas = {
+            'total_veiculos': total_veiculos,
+            'total_clientes': total_clientes,
+            'vendas_mes': vendas_mes,
+            'despesas_mes': despesas_mes
+        }
+    except Exception as e:
+        # Em caso de erro, usar valores padrão
+        estatisticas = {
+            'total_veiculos': 0,
+            'total_clientes': 0,
+            'vendas_mes': 0.0,
+            'despesas_mes': 0.0
+        }
+    
+    return render_template('index.html', estatisticas=estatisticas)
 
 # ----- CLIENTE -----
 @app.route('/clientes')
@@ -36,7 +59,7 @@ def cadastrar_cliente():
     
     return render_template('cliente_form.html')
 
-# ----- PRESTADOR -----
+# Rotas para Prestadores
 @app.route('/prestadores')
 def listar_prestadores():
     prestadores = PrestadorController.listar()
@@ -51,10 +74,50 @@ def cadastrar_prestador():
         cep = request.form['cep']
         forma_pagamento = request.form['forma_pagamento']
         
-        PrestadorController.cadastrar(nome_empresa, cidade, uf, cep, forma_pagamento)
-        return redirect('/prestadores')
+        try:
+            PrestadorController.cadastrar(nome_empresa, cidade, uf, cep, forma_pagamento)
+            return redirect('/prestadores')
+        except Exception as e:
+            return f"Erro ao cadastrar prestador: {str(e)}"
     
     return render_template('prestador_form.html')
+
+@app.route('/prestadores/<int:idprestador>')
+def detalhes_prestador(idprestador):
+    prestador = PrestadorController.buscar_prestador(idprestador)
+    if prestador:
+        return render_template('detalhes_prestador.html', prestador=prestador)
+    else:
+        return "Prestador não encontrado", 404
+
+@app.route('/prestadores/<int:idprestador>/editar', methods=['GET', 'POST'])
+def editar_prestador(idprestador):
+    if request.method == 'POST':
+        nome_empresa = request.form['nome_empresa']
+        cidade = request.form['cidade']
+        uf = request.form['uf']
+        cep = request.form['cep']
+        forma_pagamento = request.form['forma_pagamento']
+        
+        try:
+            PrestadorController.atualizar_prestador(idprestador, nome_empresa, cidade, uf, cep, forma_pagamento)
+            return redirect('/prestadores')
+        except Exception as e:
+            return f"Erro ao atualizar prestador: {str(e)}"
+    
+    prestador = PrestadorController.buscar_prestador(idprestador)
+    if prestador:
+        return render_template('prestador_form.html', prestador=prestador)
+    else:
+        return "Prestador não encontrado", 404
+
+@app.route('/prestadores/<int:idprestador>/excluir', methods=['POST'])
+def excluir_prestador(idprestador):
+    try:
+        PrestadorController.excluir_prestador(idprestador)
+        return redirect('/prestadores')
+    except Exception as e:
+        return f"Erro ao excluir prestador: {str(e)}"
 
 # ----- VEÍCULO -----
 @app.route('/veiculos')
@@ -74,16 +137,19 @@ def cadastrar_veiculo():
         cor = request.form['cor']
         preco_venda = float(request.form['preco_venda'])
         
+        # Cadastrar o veículo
         VeiculoController.cadastrar(idplaca, ano, modelo, preco_fipe, fabricante, modelo_veiculo, cor, preco_venda)
         
-        # Se foi informada uma despesa inicial
-        if request.form.get('prestador') and request.form.get('descricao') and request.form.get('valor_despesa'):
-            prestador = int(request.form['prestador'])
-            descricao = request.form['descricao']
-            valor_despesa = float(request.form['valor_despesa'])
-            data_servico = request.form['data_servico']
+        # Verificar se foi marcada a opção de incluir despesa
+        if request.form.get('incluir_despesa'):
+            idprestador = request.form.get('idprestador')
+            descricao = request.form.get('descricao')
+            valor_despesa = request.form.get('valor_despesa')
+            data_servico = request.form.get('data_servico')
             
-            DespesaController.cadastrar(idplaca, descricao, valor_despesa, prestador, data_servico)
+            # Cadastrar a despesa inicial se todos os campos foram preenchidos
+            if idprestador and descricao and valor_despesa and data_servico:
+                DespesaController.cadastrar(idplaca, descricao, float(valor_despesa), int(idprestador), data_servico)
         
         return redirect('/veiculos')
     

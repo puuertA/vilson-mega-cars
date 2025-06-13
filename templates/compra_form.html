@@ -1,75 +1,207 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-8">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Cadastrar Compra de Veículo</h4>
-            </div>
-            <div class="card-body">
-                <form method="POST" action="/compras/cadastrar">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="idplaca" class="form-label">Veículo</label>
-                                <select class="form-control" id="idplaca" name="idplaca" required>
-                                    <option value="">Selecione um veículo</option>
-                                    {% for veiculo in veiculos %}
-                                    <option value="{{ veiculo.idplaca }}">
-                                        {{ veiculo.idplaca }} - {{ veiculo.fabricante }} {{ veiculo.modelo_veiculo }}
-                                    </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="idcliente" class="form-label">Cliente (Vendedor)</label>
-                                <select class="form-control" id="idcliente" name="idcliente" required>
-                                    <option value="">Selecione o cliente</option>
-                                    {% for cliente in clientes %}
-                                    <option value="{{ cliente.idcliente }}">{{ cliente.nome }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="form-card">
+                <div class="form-header">
+                    <div class="form-icon">
+                        <i class="bi bi-cart-plus"></i>
                     </div>
+                    <h4 class="mb-0">Cadastrar Compra de Veículo</h4>
+                </div>
+                <div class="form-body">
+                    <form method="POST" action="/compras/cadastrar" id="formCompra">
+                        <!-- Seção Informações da Compra -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <i class="bi bi-info-circle me-2"></i>
+                                <h5>Informações da Compra</h5>
+                            </div>
+                            <div class="section-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="data" class="form-label">Data da Compra</label>
+                                            <input type="date" class="form-control custom-input" id="data" name="data" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="valor_pago" class="form-label">Valor Pago</label>
+                                            <div class="custom-input-group">
+                                                <span class="custom-currency">R$</span>
+                                                <input type="number" step="0.01" class="form-control custom-input" 
+                                                       id="valor_pago" name="valor_pago" placeholder="0,00" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="data" class="form-label">Data da Compra</label>
-                                <input type="date" class="form-control" id="data" name="data" required>
+                        <!-- Seção Veículo e Cliente -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <i class="bi bi-person-gear me-2"></i>
+                                <h5>Veículo e Cliente Vendedor</h5>
+                            </div>
+                            <div class="section-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="idplaca" class="form-label">Veículo</label>
+                                            <select class="form-control custom-input custom-select" id="idplaca" name="idplaca" required>
+                                                <option value="">Selecione um veículo</option>
+                                                {% for veiculo in veiculos %}
+                                                <option value="{{ veiculo.idplaca }}">
+                                                    {{ veiculo.idplaca }} - {{ veiculo.fabricante }} {{ veiculo.modelo_veiculo }} ({{ veiculo.ano }})
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="idcliente" class="form-label">Cliente (Vendedor)</label>
+                                            <select class="form-control custom-input custom-select" id="idcliente" name="idcliente" required>
+                                                <option value="">Selecione o cliente vendedor</option>
+                                                {% for cliente in clientes %}
+                                                <option value="{{ cliente.idcliente }}">{{ cliente.nome }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="valor_pago" class="form-label">Valor Pago</label>
-                                <input type="number" step="0.01" class="form-control" id="valor_pago" name="valor_pago" required>
+
+                        <!-- Seção Forma de Pagamento -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <i class="bi bi-credit-card me-2"></i>
+                                <h5>Forma de Pagamento</h5>
+                            </div>
+                            <div class="section-body">
+                                <div class="payment-options">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="dinheiro_compra" name="forma_pagamento" value="Dinheiro" required>
+                                                <label for="dinheiro_compra" class="payment-label">
+                                                    <i class="bi bi-cash-stack"></i>
+                                                    <span>Dinheiro</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="pix_compra" name="forma_pagamento" value="PIX" required>
+                                                <label for="pix_compra" class="payment-label">
+                                                    <i class="bi bi-qr-code"></i>
+                                                    <span>PIX</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="transferencia_compra" name="forma_pagamento" value="Transferência" required>
+                                                <label for="transferencia_compra" class="payment-label">
+                                                    <i class="bi bi-bank"></i>
+                                                    <span>Transferência</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="cheque_compra" name="forma_pagamento" value="Cheque" required>
+                                                <label for="cheque_compra" class="payment-label">
+                                                    <i class="bi bi-receipt"></i>
+                                                    <span>Cheque</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="financiamento_compra" name="forma_pagamento" value="Financiamento" required>
+                                                <label for="financiamento_compra" class="payment-label">
+                                                    <i class="bi bi-building"></i>
+                                                    <span>Financiamento</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="consorcio_compra" name="forma_pagamento" value="Consórcio" required>
+                                                <label for="consorcio_compra" class="payment-label">
+                                                    <i class="bi bi-people"></i>
+                                                    <span>Consórcio</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="mb-3">
-                        <label for="forma_pagamento" class="form-label">Forma de Pagamento</label>
-                        <select class="form-control" id="forma_pagamento" name="forma_pagamento" required>
-                            <option value="">Selecione...</option>
-                            <option value="Dinheiro">Dinheiro</option>
-                            <option value="PIX">PIX</option>
-                            <option value="Transferência">Transferência</option>
-                            <option value="Cheque">Cheque</option>
-                            <option value="Financiamento">Financiamento</option>
-                        </select>
-                    </div>
-
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary">Cadastrar Compra</button>
-                        <a href="/compras" class="btn btn-secondary">Voltar</a>
-                    </div>
-                </form>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-custom btn-primary-custom">
+                                <i class="bi bi-check-lg me-2"></i>Cadastrar Compra
+                            </button>
+                            <a href="/compras" class="btn btn-custom btn-secondary-custom">
+                                <i class="bi bi-arrow-left me-2"></i>Voltar
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Definir data atual como padrão
+        const dataInput = document.getElementById('data');
+        const hoje = new Date().toISOString().split('T')[0];
+        dataInput.value = hoje;
+
+        // Validar formulário antes de enviar
+        document.getElementById('formCompra').addEventListener('submit', function(e) {
+            const veiculo = document.getElementById('idplaca').value;
+            const cliente = document.getElementById('idcliente').value;
+            const valor = document.getElementById('valor_pago').value;
+            const formaPagamento = document.querySelector('input[name="forma_pagamento"]:checked');
+
+            if (!veiculo) {
+                e.preventDefault();
+                alert('Por favor, selecione um veículo.');
+                return;
+            }
+
+            if (!cliente) {
+                e.preventDefault();
+                alert('Por favor, selecione o cliente vendedor.');
+                return;
+            }
+
+            if (!valor || parseFloat(valor) <= 0) {
+                e.preventDefault();
+                alert('Por favor, informe um valor válido para a compra.');
+                return;
+            }
+
+            if (!formaPagamento) {
+                e.preventDefault();
+                alert('Por favor, selecione uma forma de pagamento.');
+                return;
+            }
+        });
+    });
+</script>
 {% endblock %}

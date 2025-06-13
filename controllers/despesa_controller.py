@@ -15,3 +15,9 @@ class DespesaController:
     @staticmethod
     def listar_por_veiculo(idplaca):
         return Despesa.listar_por_veiculo(idplaca)
+    
+    @staticmethod
+    def total_despesas_mes():
+        """Retorna o valor total das despesas do mês atual"""
+        from models.despesa import Despesa
+        return Despesa.total_despesas_mes_atual()

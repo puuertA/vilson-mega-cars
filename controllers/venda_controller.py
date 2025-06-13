@@ -16,3 +16,9 @@ class VendaController:
     @staticmethod
     def listar_itens(idvenda):
         return Venda.listar_itens(idvenda)
+
+    @staticmethod
+    def total_vendas_mes():
+        """Retorna o valor total das vendas do mês atual"""
+        from models.venda import Venda
+        return Venda.total_vendas_mes_atual()

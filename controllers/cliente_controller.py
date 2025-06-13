@@ -8,3 +8,9 @@ class ClienteController:
     @staticmethod
     def listar():
         return Cliente.listar()
+    
+    @staticmethod
+    def contar_clientes():
+        """Conta o total de clientes cadastrados"""
+        from models.cliente import Cliente
+        return Cliente.contar_total()

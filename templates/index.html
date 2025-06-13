@@ -118,7 +118,9 @@
     <div class="row mt-5">
         <div class="col-12">
             <div class="stats-section">
-                <h3 class="text-center mb-4">Visão Geral do Negócio</h3>
+                <h3 class="text-center mb-4" style="color: var(--amarelo-dourado);">
+                    <i class="bi bi-graph-up me-2"></i>Visão Geral do Negócio
+                </h3>
                 <div class="row g-3">
                     <div class="col-md-3">
                         <div class="stat-card">
@@ -126,8 +128,9 @@
                                 <i class="bi bi-car-front"></i>
                             </div>
                             <div class="stat-content">
-                                <h4>--</h4>
+                                <h4 class="stat-number">{{ estatisticas.total_veiculos }}</h4>
                                 <p>Veículos em Estoque</p>
+                                <a href="/veiculos" class="stat-link">Ver detalhes</a>
                             </div>
                         </div>
                     </div>
@@ -137,30 +140,62 @@
                                 <i class="bi bi-people"></i>
                             </div>
                             <div class="stat-content">
-                                <h4>--</h4>
+                                <h4 class="stat-number">{{ estatisticas.total_clientes }}</h4>
                                 <p>Clientes Cadastrados</p>
+                                <a href="/clientes" class="stat-link">Ver detalhes</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="stat-card">
+                        <div class="stat-card sales-stat">
                             <div class="stat-icon">
                                 <i class="bi bi-graph-up"></i>
                             </div>
                             <div class="stat-content">
-                                <h4>R$ --</h4>
+                                <h4 class="stat-number sales-value">R$ {{ "%.2f"|format(estatisticas.vendas_mes) }}</h4>
                                 <p>Vendas do Mês</p>
+                                <a href="/vendas" class="stat-link">Ver detalhes</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="stat-card">
+                        <div class="stat-card expenses-stat">
                             <div class="stat-icon">
                                 <i class="bi bi-tools"></i>
                             </div>
                             <div class="stat-content">
-                                <h4>R$ --</h4>
+                                <h4 class="stat-number expenses-value">R$ {{ "%.2f"|format(estatisticas.despesas_mes) }}</h4>
                                 <p>Despesas do Mês</p>
+                                <a href="/despesas" class="stat-link">Ver detalhes</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Indicador de lucratividade -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="profitability-card">
+                            <div class="row align-items-center">
+                                <div class="col-md-4 text-center">
+                                    <h5 style="color: var(--amarelo-dourado);">
+                                        <i class="bi bi-calculator me-2"></i>Resultado do Mês
+                                    </h5>
+                                </div>
+                                <div class="col-md-8">
+                                    {% set resultado = estatisticas.vendas_mes - estatisticas.despesas_mes %}
+                                    <div class="profit-display">
+                                        <span class="profit-label">Vendas:</span>
+                                        <span class="profit-sales">R$ {{ "%.2f"|format(estatisticas.vendas_mes) }}</span>
+                                        <span class="profit-separator">-</span>
+                                        <span class="profit-label">Despesas:</span>
+                                        <span class="profit-expenses">R$ {{ "%.2f"|format(estatisticas.despesas_mes) }}</span>
+                                        <span class="profit-separator">=</span>
+                                        <span class="profit-result {% if resultado >= 0 %}positive{% else %}negative{% endif %}">
+                                            R$ {{ "%.2f"|format(resultado) }}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
