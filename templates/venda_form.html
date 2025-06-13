@@ -1,72 +1,161 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-8">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Cadastrar Venda</h4>
-            </div>
-            <div class="card-body">
-                <form method="POST" action="/vendas/cadastrar">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="data" class="form-label">Data da Venda</label>
-                                <input type="date" class="form-control" id="data" name="data" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="valor_vendido" class="form-label">Valor Vendido</label>
-                                <input type="number" step="0.01" class="form-control" id="valor_vendido" name="valor_vendido" required>
-                            </div>
-                        </div>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="form-card">
+                <div class="form-header">
+                    <div class="form-icon">
+                        <i class="bi bi-cart-plus"></i>
                     </div>
+                    <h4 class="mb-0">Cadastrar Nova Venda</h4>
+                </div>
+                <div class="form-body">
+                    <form method="POST" action="/vendas/cadastrar" id="formVenda">
+                        <!-- Seção Dados da Venda -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <i class="bi bi-receipt me-2"></i>
+                                <h5>Informações da Venda</h5>
+                            </div>
+                            <div class="section-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="data" class="form-label">Data da Venda</label>
+                                            <input type="date" class="form-control custom-input" id="data" name="data" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="valor_vendido" class="form-label">Valor Vendido</label>
+                                            <div class="custom-input-group">
+                                                <span class="custom-currency">R$</span>
+                                                <input type="number" step="0.01" class="form-control custom-input" 
+                                                       id="valor_vendido" name="valor_vendido" 
+                                                       placeholder="0,00" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="idcliente" class="form-label">Cliente</label>
-                                <select class="form-control" id="idcliente" name="idcliente" required>
-                                    <option value="">Selecione um cliente</option>
-                                    {% for cliente in clientes %}
-                                    <option value="{{ cliente.idcliente }}">{{ cliente.nome }}</option>
-                                    {% endfor %}
-                                </select>
+                        <!-- Seção Cliente e Veículo -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <i class="bi bi-person-gear me-2"></i>
+                                <h5>Cliente e Veículo</h5>
+                            </div>
+                            <div class="section-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="idcliente" class="form-label">Cliente</label>
+                                            <select class="form-control custom-input custom-select" id="idcliente" name="idcliente" required>
+                                                <option value="">Selecione um cliente</option>
+                                                {% for cliente in clientes %}
+                                                <option value="{{ cliente.idcliente }}">{{ cliente.nome }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="idplaca" class="form-label">Veículo (Opcional)</label>
+                                            <select class="form-control custom-input custom-select" id="idplaca" name="idplaca">
+                                                <option value="">Selecione um veículo (opcional)</option>
+                                                {% for veiculo in veiculos %}
+                                                <option value="{{ veiculo.idplaca }}">{{ veiculo.idplaca }} - {{ veiculo.fabricante }} {{ veiculo.modelo_veiculo }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="idplaca" class="form-label">Veículo (Opcional)</label>
-                                <select class="form-control" id="idplaca" name="idplaca">
-                                    <option value="">Selecione um veículo (opcional)</option>
-                                    {% for veiculo in veiculos %}
-                                    <option value="{{ veiculo.idplaca }}">{{ veiculo.idplaca }} - {{ veiculo.fabricante }} {{ veiculo.modelo_veiculo }}</option>
-                                    {% endfor %}
-                                </select>
+
+                        <!-- Seção Forma de Pagamento -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <i class="bi bi-credit-card me-2"></i>
+                                <h5>Forma de Pagamento</h5>
+                            </div>
+                            <div class="section-body">
+                                <div class="payment-options">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="dinheiro" name="forma_pagamento" value="Dinheiro" required>
+                                                <label for="dinheiro" class="payment-label">
+                                                    <i class="bi bi-cash-stack"></i>
+                                                    <span>Dinheiro</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="pix" name="forma_pagamento" value="PIX" required>
+                                                <label for="pix" class="payment-label">
+                                                    <i class="bi bi-qr-code"></i>
+                                                    <span>PIX</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="credito" name="forma_pagamento" value="Cartão de Crédito" required>
+                                                <label for="credito" class="payment-label">
+                                                    <i class="bi bi-credit-card-2-front"></i>
+                                                    <span>Cartão de Crédito</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="debito" name="forma_pagamento" value="Cartão de Débito" required>
+                                                <label for="debito" class="payment-label">
+                                                    <i class="bi bi-credit-card"></i>
+                                                    <span>Cartão de Débito</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="transferencia" name="forma_pagamento" value="Transferência" required>
+                                                <label for="transferencia" class="payment-label">
+                                                    <i class="bi bi-bank"></i>
+                                                    <span>Transferência</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="financiamento" name="forma_pagamento" value="Financiamento" required>
+                                                <label for="financiamento" class="payment-label">
+                                                    <i class="bi bi-building"></i>
+                                                    <span>Financiamento</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="mb-3">
-                        <label for="forma_pagamento" class="form-label">Forma de Pagamento</label>
-                        <select class="form-control" id="forma_pagamento" name="forma_pagamento" required>
-                            <option value="">Selecione...</option>
-                            <option value="Dinheiro">Dinheiro</option>
-                            <option value="PIX">PIX</option>
-                            <option value="Cartão de Crédito">Cartão de Crédito</option>
-                            <option value="Cartão de Débito">Cartão de Débito</option>
-                            <option value="Transferência">Transferência</option>
-                            <option value="Financiamento">Financiamento</option>
-                        </select>
-                    </div>
-
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary">Cadastrar Venda</button>
-                        <a href="/vendas" class="btn btn-secondary">Voltar</a>
-                    </div>
-                </form>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-custom btn-primary-custom">
+                                <i class="bi bi-check-lg me-2"></i>Cadastrar Venda
+                            </button>
+                            <a href="/vendas" class="btn btn-custom btn-secondary-custom">
+                                <i class="bi bi-arrow-left me-2"></i>Voltar
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -76,117 +165,33 @@
 {% block scripts %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Template para novo item
-        const itemTemplate = document.querySelector('.item-venda').cloneNode(true);
-
-        // Adicionar novo item
-        document.getElementById('addItem').addEventListener('click', function() {
-            const newItem = itemTemplate.cloneNode(true);
-
-            // Limpar valores
-            const inputs = newItem.querySelectorAll('input');
-            inputs.forEach(input => {
-                if (input.classList.contains('qtde-input')) {
-                    input.value = 1;
-                } else if (!input.classList.contains('subtotal')) {
-                    input.value = '';
-                }
-            });
-
-            // Resetar select
-            const select = newItem.querySelector('select');
-            select.selectedIndex = 0;
-
-            // Adicionar botão remover
-            const row = newItem.querySelector('.row');
-            const removeBtn = document.createElement('div');
-            removeBtn.className = 'col-12 mt-2';
-            removeBtn.innerHTML = `<button type="button" class="btn btn-danger btn-sm remove-item">Remover Item</button>`;
-            row.appendChild(removeBtn);
-
-            // Adicionar eventos
-            setupItemEvents(newItem);
-
-            // Adicionar ao DOM
-            document.getElementById('itens').appendChild(newItem);
-
-            // Atualizar total
-            updateTotal();
-        });
-
-        // Configurar eventos para item inicial
-        setupItemEvents(document.querySelector('.item-venda'));
-
-        // Eventos para remover itens
-        document.addEventListener('click', function(e) {
-            if (e.target && e.target.classList.contains('remove-item')) {
-                if (document.querySelectorAll('.item-venda').length > 1) {
-                    e.target.closest('.item-venda').remove();
-                    updateTotal();
-                } else {
-                    alert('É necessário pelo menos um item na venda.');
-                }
-            }
-        });
-
-        // Função para configurar eventos dos itens
-        function setupItemEvents(item) {
-            const produtoSelect = item.querySelector('.produto-select');
-            const qtdeInput = item.querySelector('.qtde-input');
-            const valorInput = item.querySelector('.valor-input');
-            const subtotalEl = item.querySelector('.subtotal');
-
-            // Preencher valor quando selecionar produto
-            produtoSelect.addEventListener('change', function() {
-                const selectedOption = produtoSelect.options[produtoSelect.selectedIndex];
-                const preco = selectedOption.getAttribute('data-preco');
-                valorInput.value = preco;
-                updateSubtotal();
-            });
-
-            // Atualizar subtotal quando mudar quantidade ou valor
-            qtdeInput.addEventListener('input', updateSubtotal);
-            valorInput.addEventListener('input', updateSubtotal);
-
-            function updateSubtotal() {
-                const qtde = parseFloat(qtdeInput.value) || 0;
-                const valor = parseFloat(valorInput.value) || 0;
-                const subtotal = qtde * valor;
-                subtotalEl.value = subtotal.toFixed(2);
-                updateTotal();
-            }
-        }
-
-        // Função para atualizar o total da venda
-        function updateTotal() {
-            const subtotals = document.querySelectorAll('.subtotal');
-            let total = 0;
-
-            subtotals.forEach(function(el) {
-                total += parseFloat(el.value) || 0;
-            });
-
-            document.getElementById('totalVenda').value = total.toFixed(2);
-        }
+        // Definir data atual como padrão
+        const dataInput = document.getElementById('data');
+        const hoje = new Date().toISOString().split('T')[0];
+        dataInput.value = hoje;
 
         // Validar formulário antes de enviar
         document.getElementById('formVenda').addEventListener('submit', function(e) {
-            const itens = document.querySelectorAll('.item-venda');
-            let valid = true;
+            const valor = document.getElementById('valor_vendido').value;
+            const cliente = document.getElementById('idcliente').value;
+            const formaPagamento = document.querySelector('input[name="forma_pagamento"]:checked');
 
-            itens.forEach(function(item) {
-                const produto = item.querySelector('.produto-select').value;
-                const qtde = item.querySelector('.qtde-input').value;
-                const valor = item.querySelector('.valor-input').value;
-
-                if (!produto || !qtde || !valor) {
-                    valid = false;
-                }
-            });
-
-            if (!valid) {
+            if (!valor || parseFloat(valor) <= 0) {
                 e.preventDefault();
-                alert('Por favor, preencha todos os campos dos itens.');
+                alert('Por favor, informe um valor válido para a venda.');
+                return;
+            }
+
+            if (!cliente) {
+                e.preventDefault();
+                alert('Por favor, selecione um cliente.');
+                return;
+            }
+
+            if (!formaPagamento) {
+                e.preventDefault();
+                alert('Por favor, selecione uma forma de pagamento.');
+                return;
             }
         });
     });

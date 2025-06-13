@@ -1,68 +1,219 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-8">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Cadastrar Despesa</h4>
-            </div>
-            <div class="card-body">
-                <form method="POST" action="/despesas/cadastrar">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="idplaca" class="form-label">Veículo</label>
-                                <select class="form-control" id="idplaca" name="idplaca" required>
-                                    <option value="">Selecione um veículo</option>
-                                    {% for veiculo in veiculos %}
-                                    <option value="{{ veiculo.idplaca }}">
-                                        {{ veiculo.idplaca }} - {{ veiculo.fabricante }} {{ veiculo.modelo_veiculo }} ({{ veiculo.ano }})
-                                    </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="idprestador" class="form-label">Prestador de Serviço</label>
-                                <select class="form-control" id="idprestador" name="idprestador" required>
-                                    <option value="">Selecione um prestador</option>
-                                    {% for prestador in prestadores %}
-                                    <option value="{{ prestador.idprestador }}">{{ prestador.nome_empresa }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="form-card">
+                <div class="form-header">
+                    <div class="form-icon">
+                        <i class="bi bi-receipt-cutoff"></i>
                     </div>
+                    <h4 class="mb-0">Cadastrar Nova Despesa</h4>
+                </div>
+                <div class="form-body">
+                    <form method="POST" action="/despesas/cadastrar" id="formDespesa">
+                        <!-- Seção Veículo e Prestador -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <i class="bi bi-car-front-fill me-2"></i>
+                                <h5>Veículo e Prestador</h5>
+                            </div>
+                            <div class="section-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="idplaca" class="form-label">Veículo</label>
+                                            <select class="form-control custom-input custom-select" id="idplaca" name="idplaca" required>
+                                                <option value="">Selecione um veículo</option>
+                                                {% for veiculo in veiculos %}
+                                                <option value="{{ veiculo.idplaca }}">
+                                                    {{ veiculo.idplaca }} - {{ veiculo.fabricante }} {{ veiculo.modelo_veiculo }} ({{ veiculo.ano }})
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="idprestador" class="form-label">Prestador de Serviço</label>
+                                            <select class="form-control custom-input custom-select" id="idprestador" name="idprestador" required>
+                                                <option value="">Selecione um prestador</option>
+                                                {% for prestador in prestadores %}
+                                                <option value="{{ prestador.idprestador }}">{{ prestador.nome_empresa }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="descricao" class="form-label">Descrição do Serviço</label>
-                        <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Ex: Revisão completa, Troca de óleo, Pintura..." required>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="valor" class="form-label">Valor da Despesa</label>
-                                <input type="number" step="0.01" class="form-control" id="valor" name="valor" required>
+                        <!-- Seção Detalhes do Serviço -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <i class="bi bi-tools me-2"></i>
+                                <h5>Detalhes do Serviço</h5>
+                            </div>
+                            <div class="section-body">
+                                <div class="mb-3">
+                                    <label for="descricao" class="form-label">Descrição do Serviço</label>
+                                    <input type="text" class="form-control custom-input" id="descricao" name="descricao" 
+                                           placeholder="Ex: Revisão completa, Troca de óleo, Pintura..." required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="valor" class="form-label">Valor da Despesa</label>
+                                            <div class="custom-input-group">
+                                                <span class="custom-currency">R$</span>
+                                                <input type="number" step="0.01" class="form-control custom-input" 
+                                                       id="valor" name="valor" placeholder="0,00" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="data_servico" class="form-label">Data do Serviço</label>
+                                            <input type="date" class="form-control custom-input" id="data_servico" name="data_servico" required>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="data_servico" class="form-label">Data do Serviço</label>
-                                <input type="date" class="form-control" id="data_servico" name="data_servico" required>
+
+                        <!-- Seção Forma de Pagamento -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <i class="bi bi-credit-card me-2"></i>
+                                <h5>Forma de Pagamento</h5>
+                            </div>
+                            <div class="section-body">
+                                <div class="payment-options">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="dinheiro_despesa" name="forma_pagamento_despesa" value="Dinheiro" required>
+                                                <label for="dinheiro_despesa" class="payment-label">
+                                                    <i class="bi bi-cash-stack"></i>
+                                                    <span>Dinheiro</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="pix_despesa" name="forma_pagamento_despesa" value="PIX" required>
+                                                <label for="pix_despesa" class="payment-label">
+                                                    <i class="bi bi-qr-code"></i>
+                                                    <span>PIX</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="credito_despesa" name="forma_pagamento_despesa" value="Cartão de Crédito" required>
+                                                <label for="credito_despesa" class="payment-label">
+                                                    <i class="bi bi-credit-card-2-front"></i>
+                                                    <span>Cartão de Crédito</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="debito_despesa" name="forma_pagamento_despesa" value="Cartão de Débito" required>
+                                                <label for="debito_despesa" class="payment-label">
+                                                    <i class="bi bi-credit-card"></i>
+                                                    <span>Cartão de Débito</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="transferencia_despesa" name="forma_pagamento_despesa" value="Transferência" required>
+                                                <label for="transferencia_despesa" class="payment-label">
+                                                    <i class="bi bi-bank"></i>
+                                                    <span>Transferência</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="cheque_despesa" name="forma_pagamento_despesa" value="Cheque" required>
+                                                <label for="cheque_despesa" class="payment-label">
+                                                    <i class="bi bi-receipt"></i>
+                                                    <span>Cheque</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary">Cadastrar Despesa</button>
-                        <a href="/despesas" class="btn btn-secondary">Voltar</a>
-                    </div>
-                </form>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-custom btn-primary-custom">
+                                <i class="bi bi-check-lg me-2"></i>Cadastrar Despesa
+                            </button>
+                            <a href="/despesas" class="btn btn-custom btn-secondary-custom">
+                                <i class="bi bi-arrow-left me-2"></i>Voltar
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Definir data atual como padrão
+        const dataInput = document.getElementById('data_servico');
+        const hoje = new Date().toISOString().split('T')[0];
+        dataInput.value = hoje;
+
+        // Validar formulário antes de enviar
+        document.getElementById('formDespesa').addEventListener('submit', function(e) {
+            const veiculo = document.getElementById('idplaca').value;
+            const prestador = document.getElementById('idprestador').value;
+            const descricao = document.getElementById('descricao').value;
+            const valor = document.getElementById('valor').value;
+            const formaPagamento = document.querySelector('input[name="forma_pagamento_despesa"]:checked');
+
+            if (!veiculo) {
+                e.preventDefault();
+                alert('Por favor, selecione um veículo.');
+                return;
+            }
+
+            if (!prestador) {
+                e.preventDefault();
+                alert('Por favor, selecione um prestador de serviço.');
+                return;
+            }
+
+            if (!descricao.trim()) {
+                e.preventDefault();
+                alert('Por favor, informe a descrição do serviço.');
+                return;
+            }
+
+            if (!valor || parseFloat(valor) <= 0) {
+                e.preventDefault();
+                alert('Por favor, informe um valor válido para a despesa.');
+                return;
+            }
+
+            if (!formaPagamento) {
+                e.preventDefault();
+                alert('Por favor, selecione uma forma de pagamento.');
+                return;
+            }
+        });
+    });
+</script>
 {% endblock %}

@@ -59,3 +59,18 @@ class Venda:
             itens = cursor.fetchall()
         conexao.close()
         return itens
+
+    @staticmethod
+    def total_vendas_mes_atual():
+        """Retorna o valor total das vendas do mês atual"""
+        conexao = conectar()
+        with conexao.cursor() as cursor:
+            cursor.execute("""
+                SELECT COALESCE(SUM(valor_vendido), 0) as total 
+                FROM venda 
+                WHERE MONTH(data) = MONTH(CURDATE()) 
+                AND YEAR(data) = YEAR(CURDATE())
+            """)
+            resultado = cursor.fetchone()
+        conexao.close()
+        return float(resultado['total']) if resultado else 0.0

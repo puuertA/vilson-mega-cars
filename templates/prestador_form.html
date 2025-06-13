@@ -1,0 +1,262 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="form-card">
+                <div class="form-header">
+                    <div class="form-icon">
+                        <i class="bi bi-building-add"></i>
+                    </div>
+                    <h4 class="mb-0">Cadastrar Prestador de Serviço</h4>
+                </div>
+                <div class="form-body">
+                    <form method="POST" action="/prestadores/cadastrar">
+                        <!-- Seção Dados da Empresa -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <i class="bi bi-building me-2"></i>
+                                <h5>Dados da Empresa</h5>
+                            </div>
+                            <div class="section-body">
+                                <div class="mb-3">
+                                    <label for="nome_empresa" class="form-label">Nome da Empresa</label>
+                                    <input type="text" class="form-control custom-input" id="nome_empresa" name="nome_empresa" 
+                                           placeholder="Ex: Oficina do João" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="mb-3">
+                                            <label for="cidade" class="form-label">Cidade</label>
+                                            <input type="text" class="form-control custom-input" id="cidade" name="cidade" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="mb-3">
+                                            <label for="uf" class="form-label">UF</label>
+                                            <select class="form-control custom-input custom-select" id="uf" name="uf" required>
+                                                <option value="">UF</option>
+                                                <option value="AC">AC</option>
+                                                <option value="AL">AL</option>
+                                                <option value="AP">AP</option>
+                                                <option value="AM">AM</option>
+                                                <option value="BA">BA</option>
+                                                <option value="CE">CE</option>
+                                                <option value="DF">DF</option>
+                                                <option value="ES">ES</option>
+                                                <option value="GO">GO</option>
+                                                <option value="MA">MA</option>
+                                                <option value="MT">MT</option>
+                                                <option value="MS">MS</option>
+                                                <option value="MG">MG</option>
+                                                <option value="PA">PA</option>
+                                                <option value="PB">PB</option>
+                                                <option value="PR">PR</option>
+                                                <option value="PE">PE</option>
+                                                <option value="PI">PI</option>
+                                                <option value="RJ">RJ</option>
+                                                <option value="RN">RN</option>
+                                                <option value="RS">RS</option>
+                                                <option value="RO">RO</option>
+                                                <option value="RR">RR</option>
+                                                <option value="SC">SC</option>
+                                                <option value="SP">SP</option>
+                                                <option value="SE">SE</option>
+                                                <option value="TO">TO</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="mb-3">
+                                            <label for="cep" class="form-label">CEP</label>
+                                            <input type="text" class="form-control custom-input" id="cep" name="cep" 
+                                                   pattern="[0-9]{5}-?[0-9]{3}" placeholder="12345-678" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seção Pagamento -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <i class="bi bi-credit-card me-2"></i>
+                                <h5>Forma de Pagamento Preferencial</h5>
+                            </div>
+                            <div class="section-body">
+                                <div class="payment-options">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="dinheiro" name="forma_pagamento" value="Dinheiro" required>
+                                                <label for="dinheiro" class="payment-label">
+                                                    <i class="bi bi-cash-stack"></i>
+                                                    <span>Dinheiro</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="pix" name="forma_pagamento" value="PIX" required>
+                                                <label for="pix" class="payment-label">
+                                                    <i class="bi bi-qr-code"></i>
+                                                    <span>PIX</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="transferencia" name="forma_pagamento" value="Transferência" required>
+                                                <label for="transferencia" class="payment-label">
+                                                    <i class="bi bi-bank"></i>
+                                                    <span>Transferência</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="debito" name="forma_pagamento" value="Cartão de Débito" required>
+                                                <label for="debito" class="payment-label">
+                                                    <i class="bi bi-credit-card"></i>
+                                                    <span>Cartão de Débito</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="credito" name="forma_pagamento" value="Cartão de Crédito" required>
+                                                <label for="credito" class="payment-label">
+                                                    <i class="bi bi-credit-card-2-front"></i>
+                                                    <span>Cartão de Crédito</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="payment-option">
+                                                <input type="radio" class="payment-radio" id="cheque" name="forma_pagamento" value="Cheque" required>
+                                                <label for="cheque" class="payment-label">
+                                                    <i class="bi bi-receipt"></i>
+                                                    <span>Cheque</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-custom btn-primary-custom">
+                                <i class="bi bi-check-lg me-2"></i>Cadastrar Prestador
+                            </button>
+                            <a href="/prestadores" class="btn btn-custom btn-secondary-custom">
+                                <i class="bi bi-arrow-left me-2"></i>Voltar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+from database.conexao import conectar
+
+class Prestador:
+    def __init__(self, idprestador=None, nome_empresa=None, cidade=None, uf=None, cep=None, forma_pagamento=None):
+        self.idprestador = idprestador
+        self.nome_empresa = nome_empresa
+        self.cidade = cidade
+        self.uf = uf
+        self.cep = cep
+        self.forma_pagamento = forma_pagamento
+
+    @staticmethod
+    def listar():
+        """Lista todos os prestadores cadastrados"""
+        conexao = conectar()
+        prestadores = []
+        with conexao.cursor() as cursor:
+            cursor.execute("SELECT * FROM prestador ORDER BY nome_empresa")
+            resultados = cursor.fetchall()
+            for resultado in resultados:
+                prestador = Prestador(
+                    idprestador=resultado['idprestador'],
+                    nome_empresa=resultado['nome_empresa'],
+                    cidade=resultado['cidade'],
+                    uf=resultado['uf'],
+                    cep=resultado['cep'],
+                    forma_pagamento=resultado['forma_pagamento']
+                )
+                prestadores.append(prestador)
+        conexao.close()
+        return prestadores
+
+    @staticmethod
+    def cadastrar(nome_empresa, cidade, uf, cep, forma_pagamento):
+        """Cadastra um novo prestador"""
+        conexao = conectar()
+        with conexao.cursor() as cursor:
+            sql = """INSERT INTO prestador (nome_empresa, cidade, uf, cep, forma_pagamento) 
+                     VALUES (%s, %s, %s, %s, %s)"""
+            cursor.execute(sql, (nome_empresa, cidade, uf, cep, forma_pagamento))
+            conexao.commit()
+        conexao.close()
+        return True
+
+    @staticmethod
+    def buscar_por_id(idprestador):
+        """Busca um prestador pelo ID"""
+        conexao = conectar()
+        with conexao.cursor() as cursor:
+            cursor.execute("SELECT * FROM prestador WHERE idprestador = %s", (idprestador,))
+            resultado = cursor.fetchone()
+        conexao.close()
+        
+        if resultado:
+            return Prestador(
+                idprestador=resultado['idprestador'],
+                nome_empresa=resultado['nome_empresa'],
+                cidade=resultado['cidade'],
+                uf=resultado['uf'],
+                cep=resultado['cep'],
+                forma_pagamento=resultado['forma_pagamento']
+            )
+        return None
+
+    @staticmethod
+    def atualizar(idprestador, nome_empresa, cidade, uf, cep, forma_pagamento):
+        """Atualiza os dados de um prestador"""
+        conexao = conectar()
+        with conexao.cursor() as cursor:
+            sql = """UPDATE prestador 
+                     SET nome_empresa = %s, cidade = %s, uf = %s, cep = %s, forma_pagamento = %s
+                     WHERE idprestador = %s"""
+            cursor.execute(sql, (nome_empresa, cidade, uf, cep, forma_pagamento, idprestador))
+            conexao.commit()
+        conexao.close()
+        return True
+
+    @staticmethod
+    def excluir(idprestador):
+        """Exclui um prestador"""
+        conexao = conectar()
+        with conexao.cursor() as cursor:
+            cursor.execute("DELETE FROM prestador WHERE idprestador = %s", (idprestador,))
+            conexao.commit()
+        conexao.close()
+        return True
+
+    @staticmethod
+    def contar_total():
+        """Conta o total de prestadores cadastrados"""
+        conexao = conectar()
+        with conexao.cursor() as cursor:
+            cursor.execute("SELECT COUNT(*) as total FROM prestador")
+            resultado = cursor.fetchone()
+        conexao.close()
+        return resultado['total'] if resultado else 0

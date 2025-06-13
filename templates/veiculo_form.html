@@ -1,115 +1,369 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-10">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Cadastrar Veículo</h4>
-            </div>
-            <div class="card-body">
-                <form method="POST" action="/veiculos/cadastrar">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="idplaca" class="form-label">Placa</label>
-                                <input type="text" class="form-control" id="idplaca" name="idplaca" pattern="[A-Z]{3}[0-9][A-Z][0-9]{2}|[A-Z]{3}[0-9]{4}" placeholder="ABC1234 ou ABC1D23" required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="ano" class="form-label">Ano</label>
-                                <input type="number" class="form-control" id="ano" name="ano" min="1900" max="2030" required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="modelo" class="form-label">Modelo (Ano)</label>
-                                <input type="number" class="form-control" id="modelo" name="modelo" min="1900" max="2030" required>
-                            </div>
-                        </div>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="form-card">
+                <div class="form-header">
+                    <div class="form-icon">
+                        <i class="bi bi-car-front-fill"></i>
                     </div>
+                    <h4 class="mb-0">Cadastrar Veículo</h4>
+                </div>
+                <div class="form-body">
+                    <form method="POST" action="/veiculos/cadastrar" class="needs-validation" novalidate>
+                        <!-- Informações Básicas do Veículo -->
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="idplaca" class="form-label">Placa</label>
+                                    <input type="text" class="form-control custom-input" id="idplaca" name="idplaca" 
+                                           pattern="[A-Z]{3}[0-9][A-Z][0-9]{2}|[A-Z]{3}[0-9]{4}" 
+                                           placeholder="ABC1234 ou ABC1D23" 
+                                           style="text-transform: uppercase;" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira uma placa válida (ex: ABC1234).
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="ano" class="form-label">Ano</label>
+                                    <input type="number" class="form-control custom-input" id="ano" name="ano" 
+                                           min="1900" max="2030" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira um ano válido.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="modelo" class="form-label">Modelo (Ano)</label>
+                                    <input type="number" class="form-control custom-input" id="modelo" name="modelo" 
+                                           min="1900" max="2030" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira o ano do modelo.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="fabricante" class="form-label">Fabricante</label>
-                                <input type="text" class="form-control" id="fabricante" name="fabricante" required>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="fabricante" class="form-label">Fabricante</label>
+                                    <input type="text" class="form-control custom-input" id="fabricante" name="fabricante" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira o fabricante.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="modelo_veiculo" class="form-label">Modelo do Veículo</label>
+                                    <input type="text" class="form-control custom-input" id="modelo_veiculo" name="modelo_veiculo" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira o modelo do veículo.
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="modelo_veiculo" class="form-label">Modelo do Veículo</label>
-                                <input type="text" class="form-control" id="modelo_veiculo" name="modelo_veiculo" required>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="cor" class="form-label">Cor</label>
-                                <input type="text" class="form-control" id="cor" name="cor" required>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="cor" class="form-label">Cor</label>
+                                    <select class="form-control custom-input" id="cor" name="cor" required>
+                                        <option value="">Selecione a cor</option>
+                                        <option value="Branco">Branco</option>
+                                        <option value="Preto">Preto</option>
+                                        <option value="Prata">Prata</option>
+                                        <option value="Cinza">Cinza</option>
+                                        <option value="Vermelho">Vermelho</option>
+                                        <option value="Azul">Azul</option>
+                                        <option value="Verde">Verde</option>
+                                        <option value="Amarelo">Amarelo</option>
+                                        <option value="Bege">Bege</option>
+                                        <option value="Dourado">Dourado</option>
+                                        <option value="Marrom">Marrom</option>
+                                        <option value="Outro">Outro</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Por favor, selecione uma cor.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="preco_fipe" class="form-label">Preço FIPE</label>
+                                    <div class="input-group custom-input-group">
+                                        <span class="input-group-text custom-currency">R$</span>
+                                        <input type="number" step="0.01" class="form-control custom-input monetary" 
+                                               id="preco_fipe" name="preco_fipe" placeholder="0,00" required>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira o preço FIPE.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="preco_venda" class="form-label">Preço de Venda</label>
+                                    <div class="input-group custom-input-group">
+                                        <span class="input-group-text custom-currency">R$</span>
+                                        <input type="number" step="0.01" class="form-control custom-input monetary" 
+                                               id="preco_venda" name="preco_venda" placeholder="0,00" required>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira o preço de venda.
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="preco_fipe" class="form-label">Preço FIPE</label>
-                                <input type="number" step="0.01" class="form-control" id="preco_fipe" name="preco_fipe" required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="preco_venda" class="form-label">Preço de Venda</label>
-                                <input type="number" step="0.01" class="form-control" id="preco_venda" name="preco_venda" required>
-                            </div>
-                        </div>
-                    </div>
 
-                    <hr>
-                    <h5>Despesa Inicial (Opcional)</h5>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="prestador" class="form-label">Prestador de Serviço</label>
-                                <select class="form-control" id="prestador" name="prestador">
-                                    <option value="">Selecione um prestador</option>
-                                    {% for prestador in prestadores %}
-                                    <option value="{{ prestador.idprestador }}">{{ prestador.nome_empresa }}</option>
-                                    {% endfor %}
-                                </select>
+                        <!-- Seção de Despesa Inicial (Opcional) -->
+                        <div class="card mt-4" style="border: 2px solid var(--amarelo-dourado); background: rgba(222, 180, 70, 0.05);">
+                            <div class="card-header payment-header">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-tools me-2"></i>
+                                        <h6 class="mb-0">Despesa Inicial (Opcional)</h6>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="incluir_despesa" name="incluir_despesa">
+                                        <label class="form-check-label" for="incluir_despesa">
+                                            Incluir despesa
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="data_servico" class="form-label">Data do Serviço</label>
-                                <input type="date" class="form-control" id="data_servico" name="data_servico">
-                            </div>
-                        </div>
-                    </div>
+                            <div class="card-body" id="despesa_fields" style="display: none;">
+                                <p class="mb-3 despesa-info">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    Caso o veículo já tenha alguma despesa (revisão, reparo, etc.), você pode cadastrá-la aqui.
+                                </p>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="idprestador" class="form-label">Prestador de Serviço</label>
+                                            <select class="form-control custom-input" id="idprestador" name="idprestador">
+                                                <option value="">Selecione um prestador</option>
+                                                {% for prestador in prestadores %}
+                                                <option value="{{ prestador.idprestador }}">{{ prestador.nome_empresa }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="data_servico" class="form-label">Data do Serviço</label>
+                                            <input type="date" class="form-control custom-input" id="data_servico" name="data_servico">
+                                        </div>
+                                    </div>
+                                </div>
 
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="mb-3">
-                                <label for="descricao" class="form-label">Descrição da Despesa</label>
-                                <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Ex: Revisão, Pintura, etc.">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="mb-3">
+                                            <label for="descricao" class="form-label">Descrição da Despesa</label>
+                                            <input type="text" class="form-control custom-input" id="descricao" name="descricao" 
+                                                   placeholder="Ex: Revisão completa, Troca de óleo, Pintura...">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="valor_despesa" class="form-label">Valor da Despesa</label>
+                                            <div class="input-group custom-input-group">
+                                                <span class="input-group-text custom-currency">R$</span>
+                                                <input type="number" step="0.01" class="form-control custom-input monetary" 
+                                                       id="valor_despesa" name="valor_despesa" placeholder="0,00">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label for="valor_despesa" class="form-label">Valor da Despesa</label>
-                                <input type="number" step="0.01" class="form-control" id="valor_despesa" name="valor_despesa">
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary">Cadastrar Veículo</button>
-                        <a href="/veiculos" class="btn btn-secondary">Voltar</a>
-                    </div>
-                </form>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-custom btn-primary-custom">
+                                <i class="bi bi-check-lg me-2"></i>Cadastrar Veículo
+                            </button>
+                            <a href="/veiculos" class="btn btn-custom btn-secondary-custom">
+                                <i class="bi bi-arrow-left me-2"></i>Voltar
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Aplicar CSS personalizado via JavaScript
+    const switchElement = document.getElementById('incluir_despesa');
+    
+    // CSS inline para garantir que funcione
+    const customCSS = `
+        #incluir_despesa:checked {
+            background-color: #deb446 !important;
+            border-color: #deb446 !important;
+        }
+        #incluir_despesa:focus {
+            border-color: #deb446 !important;
+            box-shadow: 0 0 0 0.25rem rgba(222, 180, 70, 0.25) !important;
+        }
+    `;
+    
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = customCSS;
+    document.head.appendChild(styleSheet);
+    
+    // Toggle da seção de despesa
+    const incluirDespesa = document.getElementById('incluir_despesa');
+    const despesaFields = document.getElementById('despesa_fields');
+    
+    incluirDespesa.addEventListener('change', function() {
+        if (this.checked) {
+            despesaFields.style.display = 'block';
+            despesaFields.style.animation = 'fadeIn 0.3s ease-in';
+            
+            // Tornar campos obrigatórios quando a despesa está habilitada
+            document.getElementById('idprestador').required = true;
+            document.getElementById('descricao').required = true;
+            document.getElementById('valor_despesa').required = true;
+            document.getElementById('data_servico').required = true;
+        } else {
+            despesaFields.style.display = 'none';
+            
+            // Remover obrigatoriedade quando a despesa está desabilitada
+            document.getElementById('idprestador').required = false;
+            document.getElementById('descricao').required = false;
+            document.getElementById('valor_despesa').required = false;
+            document.getElementById('data_servico').required = false;
+            
+            // Limpar campos
+            document.getElementById('idprestador').value = '';
+            document.getElementById('descricao').value = '';
+            document.getElementById('valor_despesa').value = '';
+            document.getElementById('data_servico').value = '';
+        }
+    });
+
+    // Converter placa para maiúsculo automaticamente
+    document.getElementById('idplaca').addEventListener('input', function(e) {
+        e.target.value = e.target.value.toUpperCase();
+    });
+
+    // Validação personalizada para placa
+    document.getElementById('idplaca').addEventListener('blur', function(e) {
+        const placa = e.target.value;
+        const mercosulPattern = /^[A-Z]{3}[0-9][A-Z][0-9]{2}$/;
+        const antigoPattern = /^[A-Z]{3}[0-9]{4}$/;
+        
+        if (placa && !mercosulPattern.test(placa) && !antigoPattern.test(placa)) {
+            e.target.setCustomValidity('Formato de placa inválido. Use ABC1234 ou ABC1D23');
+        } else {
+            e.target.setCustomValidity('');
+        }
+    });
+
+    // Definir data atual como padrão para data do serviço
+    const hoje = new Date().toISOString().split('T')[0];
+    document.getElementById('data_servico').value = hoje;
+
+    // Validação do formulário antes do envio
+    const form = document.querySelector('.needs-validation');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        // Validação específica para despesa se estiver habilitada
+        if (incluirDespesa.checked) {
+            const prestador = document.getElementById('idprestador').value;
+            const descricao = document.getElementById('descricao').value;
+            const valorDespesa = document.getElementById('valor_despesa').value;
+            const dataServico = document.getElementById('data_servico').value;
+
+            if (!prestador || !descricao || !valorDespesa || !dataServico) {
+                event.preventDefault();
+                event.stopPropagation();
+                alert('Por favor, preencha todos os campos da despesa ou desmarque a opção.');
+                return false;
+            }
+        }
+
+        form.classList.add('was-validated');
+    }, false);
+});
+
+// Animação CSS
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+`;
+document.head.appendChild(style);
+</script>
+{% endblock %}
+
+{% block styles %}
+<style>
+/* Switch personalizado - mais específico */
+#incluir_despesa.form-check-input {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+#incluir_despesa.form-check-input:checked {
+    background-color: #deb446 !important;
+    border-color: #deb446 !important;
+}
+
+#incluir_despesa.form-check-input:focus {
+    border-color: #deb446 !important;
+    box-shadow: 0 0 0 0.25rem rgba(222, 180, 70, 0.25) !important;
+}
+
+#incluir_despesa.form-check-input:checked:focus {
+    background-color: #deb446 !important;
+    border-color: #deb446 !important;
+    box-shadow: 0 0 0 0.25rem rgba(222, 180, 70, 0.25) !important;
+}
+
+/* Caso o layout.html tenha CSS conflitante */
+.form-switch .form-check-input {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+.form-switch .form-check-input:checked {
+    background-color: #deb446 !important;
+    border-color: #deb446 !important;
+}
+
+.form-switch .form-check-input:focus {
+    border-color: #deb446 !important;
+    box-shadow: 0 0 0 0.25rem rgba(222, 180, 70, 0.25) !important;
+}
+
+/* Texto informativo da despesa - mais específico para sobrescrever .text-muted */
+p.text-muted.despesa-info {
+    color: #deb446 !important;
+    font-weight: 500 !important;
+}
+
+p.text-muted.despesa-info i {
+    color: #deb446 !important;
+}
+</style>
 {% endblock %}

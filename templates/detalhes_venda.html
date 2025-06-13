@@ -1,82 +1,157 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="card">
-    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">Detalhes da Venda #{{ idvenda }}</h4>
-        <a href="/vendas" class="btn btn-light">Voltar para Vendas</a>
-    </div>
-    <div class="card-body">
-        {% if venda %}
-        <div class="row">
-            <div class="col-md-6">
-                <h5>Informações da Venda</h5>
-                <table class="table table-borderless">
-                    <tr>
-                        <td><strong>Data:</strong></td>
-                        <td>{{ venda.data.strftime('%d/%m/%Y') if venda.data else '' }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Cliente:</strong></td>
-                        <td>{{ venda.cliente }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Forma de Pagamento:</strong></td>
-                        <td>{{ venda.forma_pagamento }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Valor da Venda:</strong></td>
-                        <td><span class="text-success h5">R$ {{ "%.2f"|format(venda.valor_vendido) }}</span></td>
-                    </tr>
-                </table>
+<div class="container mt-4">
+    <div class="form-card">
+        <div class="form-header">
+            <div class="form-icon">
+                <i class="bi bi-receipt-cutoff"></i>
             </div>
-            
-            <div class="col-md-6">
-                {% if venda.modelo_veiculo %}
-                <h5>Veículo Vendido</h5>
-                <table class="table table-borderless">
-                    <tr>
-                        <td><strong>Placa:</strong></td>
-                        <td>{{ venda.idplaca }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Veículo:</strong></td>
-                        <td>{{ venda.fabricante }} {{ venda.modelo_veiculo }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Cor:</strong></td>
-                        <td>{{ venda.cor }}</td>
-                    </tr>
-                </table>
-                {% else %}
-                <div class="alert alert-info">
-                    <h6>Venda de Serviço</h6>
-                    <p>Esta venda não está associada a nenhum veículo específico.</p>
-                </div>
-                {% endif %}
-            </div>
+            <h4 class="mb-0">Detalhes da Venda #{{ idvenda }}</h4>
         </div>
-
-        <hr>
-
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card bg-success text-white">
-                    <div class="card-body text-center">
-                        <h5 class="mb-0">Valor Total da Venda</h5>
-                        <h2>R$ {{ "%.2f"|format(venda.valor_vendido) }}</h2>
+        <div class="form-body">
+            {% if venda %}
+            <!-- Informações Principais -->
+            <div class="section-card">
+                <div class="section-header">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <h5>Informações da Venda</h5>
+                </div>
+                <div class="section-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="info-group">
+                                <label class="info-label">
+                                    <i class="bi bi-calendar3 me-2"></i>Data da Venda
+                                </label>
+                                <div class="info-value">{{ venda.data.strftime('%d/%m/%Y') if venda.data else '' }}</div>
+                            </div>
+                            <div class="info-group">
+                                <label class="info-label">
+                                    <i class="bi bi-person me-2"></i>Cliente
+                                </label>
+                                <div class="info-value">{{ venda.cliente }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-group">
+                                <label class="info-label">
+                                    <i class="bi bi-credit-card me-2"></i>Forma de Pagamento
+                                </label>
+                                <div class="info-value">
+                                    <span class="badge-payment">{{ venda.forma_pagamento }}</span>
+                                </div>
+                            </div>
+                            <div class="info-group">
+                                <label class="info-label">
+                                    <i class="bi bi-currency-dollar me-2"></i>Valor da Venda
+                                </label>
+                                <div class="info-value" style="font-size: 1.5rem; color: var(--amarelo-dourado); font-weight: bold;">
+                                    R$ {{ "%.2f"|format(venda.valor_vendido) }}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {% else %}
-        <div class="alert alert-danger text-center">
-            <h5>Venda não encontrada</h5>
-            <p>A venda solicitada não existe ou foi removida.</p>
-            <a href="/vendas" class="btn btn-primary">Voltar para Vendas</a>
+            <!-- Informações do Veículo -->
+            {% if venda.modelo_veiculo %}
+            <div class="section-card">
+                <div class="section-header">
+                    <i class="bi bi-car-front me-2"></i>
+                    <h5>Veículo Vendido</h5>
+                </div>
+                <div class="section-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="info-group">
+                                <label class="info-label">
+                                    <i class="bi bi-123 me-2"></i>Placa
+                                </label>
+                                <div class="info-value">
+                                    <span class="badge-id">{{ venda.idplaca }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="info-group">
+                                <label class="info-label">
+                                    <i class="bi bi-car-front-fill me-2"></i>Veículo
+                                </label>
+                                <div class="info-value">{{ venda.fabricante }} {{ venda.modelo_veiculo }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="info-group">
+                                <label class="info-label">
+                                    <i class="bi bi-palette me-2"></i>Cor
+                                </label>
+                                <div class="info-value">{{ venda.cor }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="section-card">
+                <div class="section-header" style="background: linear-gradient(135deg, var(--caramelo-escuro), var(--laranja-terroso));">
+                    <i class="bi bi-tools me-2"></i>
+                    <h5>Venda de Serviço</h5>
+                </div>
+                <div class="section-body">
+                    <div class="text-center py-3">
+                        <i class="bi bi-tools" style="font-size: 3rem; color: var(--amarelo-dourado); margin-bottom: 1rem;"></i>
+                        <p style="color: var(--amarelo-claro); font-size: 1.1rem;">
+                            Esta venda não está associada a nenhum veículo específico.<br>
+                            <small>Possivelmente refere-se à prestação de serviços.</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Resumo Financeiro -->
+            <div class="section-card" style="border: 3px solid var(--vermelho-queimado);">
+                <div class="section-header" style="background: linear-gradient(135deg, var(--vermelho-queimado), var(--laranja-terroso));">
+                    <i class="bi bi-cash-stack me-2"></i>
+                    <h5>Resumo Financeiro</h5>
+                </div>
+                <div class="section-body">
+                    <div class="text-center py-4">
+                        <h3 style="color: var(--amarelo-dourado); margin-bottom: 1rem;">Valor Total da Venda</h3>
+                        <div style="font-size: 2.5rem; font-weight: bold; color: var(--amarelo-dourado); text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+                            R$ {{ "%.2f"|format(venda.valor_vendido) }}
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <span class="badge-payment" style="font-size: 1rem; padding: 0.5rem 1rem;">
+                                {{ venda.forma_pagamento }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+                <h5>Venda não encontrada</h5>
+                <p>A venda solicitada não existe ou foi removida do sistema.</p>
+                <a href="/vendas" class="btn btn-custom btn-primary-custom">
+                    <i class="bi bi-arrow-left me-2"></i>Voltar para Vendas
+                </a>
+            </div>
+            {% endif %}
+
+            <!-- Ações -->
+            <div class="form-actions">
+                <a href="/vendas" class="btn btn-custom btn-primary-custom">
+                    <i class="bi bi-arrow-left me-2"></i>Voltar para Vendas
+                </a>
+            </div>
         </div>
-        {% endif %}
     </div>
 </div>
 {% endblock %}

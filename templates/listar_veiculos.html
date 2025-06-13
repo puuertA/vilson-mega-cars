@@ -1,156 +1,84 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="card">
-    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">Veículos</h4>
-        <a href="/veiculos/cadastrar" class="btn btn-light">Novo Veículo</a>
-    </div>
-    <div class="card-body">
-        {% if veiculos %}
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>Placa</th>
-                        <th>Ano/Modelo</th>
-                        <th>Fabricante</th>
-                        <th>Modelo</th>
-                        <th>Cor</th>
-                        <th>Preço FIPE</th>
-                        <th>Preço Venda</th>
-                        <th>Total Despesas</th>
-                        <th>Margem</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for veiculo in veiculos %}
-                    {% set margem = veiculo.preco_venda - veiculo.preco_fipe - veiculo.total_despesa %}
-                    <tr>
-                        <td><strong>{{ veiculo.idplaca }}</strong></td>
-                        <td>{{ veiculo.ano }}/{{ veiculo.modelo }}</td>
-                        <td>{{ veiculo.fabricante }}</td>
-                        <td>{{ veiculo.modelo_veiculo }}</td>
-                        <td>{{ veiculo.cor }}</td>
-                        <td>R$ {{ "%.2f"|format(veiculo.preco_fipe) }}</td>
-                        <td>R$ {{ "%.2f"|format(veiculo.preco_venda) }}</td>
-                        <td>
-                            {% if veiculo.total_despesa > 0 %}
-                                <span class="text-danger">R$ {{ "%.2f"|format(veiculo.total_despesa) }}</span>
-                            {% else %}
-                                <span class="text-muted">R$ 0,00</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if margem > 0 %}
-                                <span class="text-success">R$ {{ "%.2f"|format(margem) }}</span>
-                            {% elif margem == 0 %}
-                                <span class="text-warning">R$ 0,00</span>
-                            {% else %}
-                                <span class="text-danger">R$ {{ "%.2f"|format(margem) }}</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <div class="btn-group" role="group">
-                                <a href="/despesas/veiculo/{{ veiculo.idplaca }}" class="btn btn-sm btn-info" title="Ver Despesas">
-                                    <i class="bi bi-receipt"></i>
-                                </a>
-                                <button type="button" class="btn btn-sm btn-warning" title="Editar" onclick="alert('Funcionalidade em desenvolvimento')">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm btn-danger" title="Excluir" onclick="confirmarExclusao('{{ veiculo.idplaca }}')">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Resumo -->
-        <div class="row mt-4">
-            <div class="col-md-3">
-                <div class="card bg-primary text-white">
-                    <div class="card-body text-center">
-                        <h5>{{ veiculos|length }}</h5>
-                        <small>Veículos no Estoque</small>
-                    </div>
+<div class="container mt-4">
+    <div class="table-card">
+        <div class="table-header">
+            <div class="header-content">
+                <div class="header-icon">
+                    <i class="bi bi-car-front-fill"></i>
                 </div>
+                <h4 class="mb-0">Estoque de Veículos</h4>
             </div>
-            <div class="col-md-3">
-                <div class="card bg-success text-white">
-                    <div class="card-body text-center">
-                        <h5>R$ {{ "%.0f"|format(veiculos|sum(attribute='preco_venda')) }}</h5>
-                        <small>Valor Total Estoque</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card bg-danger text-white">
-                    <div class="card-body text-center">
-                        <h5>R$ {{ "%.0f"|format(veiculos|sum(attribute='total_despesa')) }}</h5>
-                        <small>Total em Despesas</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card bg-info text-white">
-                    <div class="card-body text-center">
-                        {% set margem_total = veiculos|sum(attribute='preco_venda') - veiculos|sum(attribute='preco_fipe') - veiculos|sum(attribute='total_despesa') %}
-                        <h5>R$ {{ "%.0f"|format(margem_total) }}</h5>
-                        <small>Margem Projetada</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {% else %}
-        <div class="alert alert-info text-center">
-            <h5><i class="bi bi-car-front"></i> Nenhum veículo cadastrado</h5>
-            <p>Comece cadastrando seu primeiro veículo no estoque.</p>
-            <a href="/veiculos/cadastrar" class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i> Cadastrar Primeiro Veículo
+            <a href="/veiculos/cadastrar" class="btn btn-custom btn-primary-custom">
+                <i class="bi bi-car-front me-2"></i>Novo Veículo
             </a>
         </div>
-        {% endif %}
-    </div>
-</div>
-
-<!-- Modal de Confirmação de Exclusão -->
-<div class="modal fade" id="modalExclusao" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Confirmar Exclusão</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="table-body">
+            {% if veiculos %}
+            <div class="table-responsive">
+                <table class="table custom-table">
+                    <thead>
+                        <tr>
+                            <th><i class="bi bi-car-front me-2"></i>Placa</th>
+                            <th><i class="bi bi-calendar me-2"></i>Ano</th>
+                            <th><i class="bi bi-gear me-2"></i>Modelo</th>
+                            <th><i class="bi bi-building me-2"></i>Fabricante</th>
+                            <th><i class="bi bi-palette me-2"></i>Cor</th>
+                            <th><i class="bi bi-currency-dollar me-2"></i>Preço FIPE</th>
+                            <th><i class="bi bi-tag me-2"></i>Preço Venda</th>
+                            <th><i class="bi bi-tools me-2"></i>Despesas</th>
+                            <th><i class="bi bi-gear me-2"></i>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for veiculo in veiculos %}
+                        <tr class="table-row">
+                            <td><span class="badge badge-placa">{{ veiculo.idplaca }}</span></td>
+                            <td class="fw-bold">{{ veiculo.ano }}</td>
+                            <td>{{ veiculo.modelo_veiculo }}</td>
+                            <td>{{ veiculo.fabricante }}</td>
+                            <td><span class="badge badge-cor">{{ veiculo.cor }}</span></td>
+                            <td class="price">R$ {{ "%.2f"|format(veiculo.preco_fipe|float) }}</td>
+                            <td class="price-sale">R$ {{ "%.2f"|format(veiculo.preco_venda|float) }}</td>
+                            <td class="expense">
+                                {% if veiculo.total_despesa and veiculo.total_despesa > 0 %}
+                                    <span class="badge badge-expense">R$ {{ "%.2f"|format(veiculo.total_despesa|float) }}</span>
+                                {% else %}
+                                    <span class="badge badge-no-expense">Sem despesas</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-action-edit" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-action-view" title="Ver Detalhes">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-action-delete" title="Excluir">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <div class="modal-body">
-                <p>Tem certeza que deseja excluir este veículo?</p>
-                <p class="text-warning"><small>Esta ação não pode ser desfeita e também excluirá todas as despesas relacionadas.</small></p>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="bi bi-car-front-fill"></i>
+                </div>
+                <h5>Nenhum veículo no estoque</h5>
+                <p>Comece adicionando veículos ao seu estoque para gerenciar suas vendas.</p>
+                <a href="/veiculos/cadastrar" class="btn btn-custom btn-primary-custom">
+                    <i class="bi bi-car-front me-2"></i>Adicionar Primeiro Veículo
+                </a>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" onclick="excluirVeiculo()">Excluir</button>
-            </div>
+            {% endif %}
         </div>
     </div>
 </div>
-
-<script>
-let placaParaExcluir = '';
-
-function confirmarExclusao(placa) {
-    placaParaExcluir = placa;
-    new bootstrap.Modal(document.getElementById('modalExclusao')).show();
-}
-
-function excluirVeiculo() {
-    // Aqui você implementaria a rota de exclusão
-    alert('Funcionalidade de exclusão em desenvolvimento');
-    bootstrap.Modal.getInstance(document.getElementById('modalExclusao')).hide();
-}
-</script>
 {% endblock %}

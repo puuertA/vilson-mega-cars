@@ -1,6 +1,18 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+<!-- Toast Container -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1060; margin-top: 80px;">
+    <div id="liveToast" class="toast custom-toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header custom-toast-header">
+            <div class="toast-icon me-2"></div>
+            <strong class="me-auto toast-title"></strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body custom-toast-body"></div>
+    </div>
+</div>
+
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-lg-8">
@@ -12,37 +24,52 @@
                     <h4 class="mb-0">Cadastrar Cliente</h4>
                 </div>
                 <div class="form-body">
-                    <form method="POST" action="/clientes/cadastrar">
+                    <form method="POST" action="/clientes/cadastrar" id="clienteForm" novalidate>
                         <div class="mb-3">
                             <label for="nome" class="form-label">Nome</label>
-                            <input type="text" class="form-control custom-input" id="nome" name="nome" required>
+                            <input type="text" class="form-control custom-input" id="nome" name="nome" required minlength="2" maxlength="100">
+                            <div class="invalid-feedback">
+                                Por favor, insira um nome válido (mínimo 2 caracteres).
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="endereco" class="form-label">Endereço</label>
-                            <input type="text" class="form-control custom-input" id="endereco" name="endereco" required>
+                            <input type="text" class="form-control custom-input" id="endereco" name="endereco" required minlength="5" maxlength="200">
+                            <div class="invalid-feedback">
+                                Por favor, insira um endereço válido (mínimo 5 caracteres).
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="cidade" class="form-label">Cidade</label>
-                                    <input type="text" class="form-control custom-input" id="cidade" name="cidade" required>
+                                    <input type="text" class="form-control custom-input" id="cidade" name="cidade" required minlength="2" maxlength="50">
+                                    <div class="invalid-feedback">
+                                        Por favor, insira uma cidade válida.
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="uf" class="form-label">UF</label>
-                                    <input type="text" class="form-control custom-input" id="uf" name="uf" maxlength="2" required>
+                                    <input type="text" class="form-control custom-input" id="uf" name="uf" maxlength="2" minlength="2" pattern="[A-Za-z]{2}" required style="text-transform: uppercase;">
+                                    <div class="invalid-feedback">
+                                        UF deve ter exatamente 2 letras.
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label for="cep" class="form-label">CEP</label>
-                                    <input type="text" class="form-control custom-input" id="cep" name="cep" pattern="[0-9]{5}-?[0-9]{3}" placeholder="12345-678" required>
+                                    <input type="text" class="form-control custom-input" id="cep" name="cep" pattern="[0-9]{5}-?[0-9]{3}" placeholder="12345-678" required maxlength="9">
+                                    <div class="invalid-feedback">
+                                        CEP deve ter o formato 12345-678.
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-custom btn-primary-custom">
+                            <button type="submit" class="btn btn-custom btn-primary-custom" id="submitBtn">
                                 <i class="bi bi-check-lg me-2"></i>Cadastrar
                             </button>
                             <a href="/clientes" class="btn btn-custom btn-secondary-custom">
@@ -55,4 +82,301 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('clienteForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const toastEl = document.getElementById('liveToast');
+    const toast = new bootstrap.Toast(toastEl);
+
+    // Função para mostrar toast
+    function showToast(type, title, message) {
+        const toastHeader = toastEl.querySelector('.toast-header');
+        const toastBody = toastEl.querySelector('.toast-body');
+        const toastIcon = toastEl.querySelector('.toast-icon');
+        const toastTitle = toastEl.querySelector('.toast-title');
+        const btnClose = toastEl.querySelector('.btn-close');
+
+        // Reset classes
+        toastEl.className = 'toast custom-toast';
+        toastHeader.className = 'toast-header custom-toast-header';
+        toastBody.className = 'toast-body custom-toast-body';
+        btnClose.className = 'btn-close';
+
+        if (type === 'success') {
+            toastEl.classList.add('toast-success');
+            toastHeader.classList.add('bg-success', 'text-white');
+            toastBody.classList.add('bg-success', 'text-white');
+            toastIcon.innerHTML = '<i class="bi bi-check-circle-fill text-white"></i>';
+            btnClose.classList.add('btn-close-white');
+        } else if (type === 'error') {
+            toastEl.classList.add('toast-error');
+            toastHeader.classList.add('bg-danger', 'text-white');
+            toastBody.classList.add('bg-danger', 'text-white');
+            toastIcon.innerHTML = '<i class="bi bi-exclamation-triangle-fill text-white"></i>';
+            btnClose.classList.add('btn-close-white');
+        } else if (type === 'warning') {
+            toastEl.classList.add('toast-warning');
+            toastHeader.classList.add('bg-warning', 'text-dark');
+            toastBody.classList.add('bg-warning', 'text-dark');
+            toastIcon.innerHTML = '<i class="bi bi-exclamation-circle-fill text-dark"></i>';
+        }
+
+        toastTitle.textContent = title;
+        toastBody.textContent = message;
+        toast.show();
+    }
+
+    // Função para validar campo individualmente
+    function validateField(field) {
+        const isValid = field.checkValidity();
+        
+        if (isValid) {
+            field.classList.remove('is-invalid');
+            field.classList.add('is-valid');
+        } else {
+            field.classList.remove('is-valid');
+            field.classList.add('is-invalid');
+        }
+        
+        return isValid;
+    }
+
+    // Máscara para CEP
+    document.getElementById('cep').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 5) {
+            value = value.substring(0, 5) + '-' + value.substring(5, 8);
+        }
+        e.target.value = value;
+        
+        // Validar após aplicar máscara
+        setTimeout(() => validateField(e.target), 10);
+    });
+
+    // Validação em tempo real para UF
+    document.getElementById('uf').addEventListener('input', function(e) {
+        e.target.value = e.target.value.toUpperCase().replace(/[^A-Z]/g, '');
+        validateField(e.target);
+    });
+
+    // Validação para nome (apenas letras e espaços)
+    document.getElementById('nome').addEventListener('input', function(e) {
+        const value = e.target.value;
+        if (!/^[a-zA-ZÀ-ÿ\s]*$/.test(value)) {
+            e.target.setCustomValidity('Nome deve conter apenas letras e espaços.');
+        } else {
+            e.target.setCustomValidity('');
+        }
+        validateField(e.target);
+    });
+
+    // Validação para todos os campos em tempo real
+    const fields = ['nome', 'endereco', 'cidade', 'uf', 'cep'];
+    fields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        
+        field.addEventListener('blur', function() {
+            validateField(this);
+        });
+        
+        field.addEventListener('input', function() {
+            // Remove a validação visual se o campo estiver sendo digitado
+            if (this.classList.contains('is-invalid') || this.classList.contains('is-valid')) {
+                setTimeout(() => validateField(this), 10);
+            }
+        });
+    });
+
+    // Validação de CEP via API
+    document.getElementById('cep').addEventListener('blur', function(e) {
+        const cep = e.target.value.replace(/\D/g, '');
+        if (cep.length === 8) {
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.erro) {
+                        document.getElementById('endereco').value = data.logradouro || '';
+                        document.getElementById('cidade').value = data.localidade || '';
+                        document.getElementById('uf').value = data.uf || '';
+                        
+                        // Validar campos preenchidos automaticamente
+                        validateField(document.getElementById('endereco'));
+                        validateField(document.getElementById('cidade'));
+                        validateField(document.getElementById('uf'));
+                        
+                        showToast('success', 'CEP encontrado!', 'Endereço preenchido automaticamente.');
+                    } else {
+                        showToast('warning', 'CEP não encontrado', 'Verifique o CEP informado.');
+                    }
+                })
+                .catch(() => {
+                    showToast('warning', 'Erro na consulta', 'Não foi possível consultar o CEP.');
+                });
+        }
+    });
+
+    // Validação do formulário
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validar todos os campos
+        let isFormValid = true;
+        fields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (!validateField(field)) {
+                isFormValid = false;
+            }
+        });
+        
+        if (!isFormValid) {
+            showToast('error', 'Erro de validação', 'Por favor, corrija os campos destacados.');
+            return;
+        }
+
+        // Validações adicionais
+        const nome = document.getElementById('nome').value.trim();
+        const endereco = document.getElementById('endereco').value.trim();
+        const cidade = document.getElementById('cidade').value.trim();
+        const uf = document.getElementById('uf').value.trim();
+        const cep = document.getElementById('cep').value.replace(/\D/g, '');
+
+        if (nome.length < 2) {
+            showToast('error', 'Nome inválido', 'Nome deve ter pelo menos 2 caracteres.');
+            return;
+        }
+
+        if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(nome)) {
+            showToast('error', 'Nome inválido', 'Nome deve conter apenas letras e espaços.');
+            return;
+        }
+
+        if (endereco.length < 5) {
+            showToast('error', 'Endereço inválido', 'Endereço deve ter pelo menos 5 caracteres.');
+            return;
+        }
+
+        if (uf.length !== 2 || !/^[A-Z]{2}$/.test(uf)) {
+            showToast('error', 'UF inválida', 'UF deve ter exatamente 2 letras maiúsculas.');
+            return;
+        }
+
+        if (cep.length !== 8) {
+            showToast('error', 'CEP inválido', 'CEP deve ter 8 dígitos.');
+            return;
+        }
+
+        // Se chegou até aqui, tudo está válido
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Cadastrando...';
+        
+        // Submeter o formulário
+        form.submit();
+    });
+});
+</script>
+
+<style>
+.toast-container {
+    z-index: 1060 !important;
+    margin-top: 80px !important;
+}
+
+.custom-toast {
+    min-width: 300px;
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.custom-toast-header {
+    border-bottom: none;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.custom-toast-body {
+    padding: 0.75rem 1rem;
+    border-radius: 0 0 0.5rem 0.5rem;
+    font-weight: 500;
+}
+
+.toast-success .custom-toast-header,
+.toast-success .custom-toast-body {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+}
+
+.toast-error .custom-toast-header,
+.toast-error .custom-toast-body {
+    background: linear-gradient(135deg, #dc3545, #e74c3c) !important;
+}
+
+.toast-warning .custom-toast-header,
+.toast-warning .custom-toast-body {
+    background: linear-gradient(135deg, #ffc107, #ffca2c) !important;
+}
+
+.toast-icon i {
+    font-size: 1.1rem;
+}
+
+.toast-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.custom-toast-body {
+    font-size: 0.9rem;
+}
+
+.btn-close-white {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Validação visual dos campos */
+.form-control.is-invalid {
+    border-color: #dc3545;
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath d='m5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.form-control.is-valid {
+    border-color: #198754;
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='m2.3 6.73.94-.94 1.44 1.43L7.4 4.5H6.53L4.66 6.37 3.22 4.93l-.95.94 1.95 1.86z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+/* Mensagens de feedback apenas quando há erro */
+.invalid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: #dc3545;
+}
+
+.form-control.is-invalid ~ .invalid-feedback {
+    display: block;
+}
+
+.valid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: #198754;
+}
+
+.form-control.is-valid ~ .valid-feedback {
+    display: block;
+}
+</style>
 {% endblock %}

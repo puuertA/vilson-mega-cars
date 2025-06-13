@@ -43,3 +43,18 @@ class Despesa:
             resultado = cursor.fetchone()
         conexao.close()
         return resultado['total'] if resultado['total'] else 0
+
+    @staticmethod
+    def total_despesas_mes_atual():
+        """Retorna o valor total das despesas do mês atual"""
+        conexao = conectar()
+        with conexao.cursor() as cursor:
+            cursor.execute("""
+                SELECT COALESCE(SUM(valor), 0) as total 
+                FROM despesa 
+                WHERE MONTH(data_servico) = MONTH(CURDATE()) 
+                AND YEAR(data_servico) = YEAR(CURDATE())
+            """)
+            resultado = cursor.fetchone()
+        conexao.close()
+        return float(resultado['total']) if resultado else 0.0
